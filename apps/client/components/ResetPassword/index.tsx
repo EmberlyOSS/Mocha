@@ -77,7 +77,7 @@ export default function ResetPassword({ user }) {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-muted0 bg-opacity-75 transition-opacity" />
+              <Dialog.Overlay className="fixed inset-0 bg-foreground/50 transition-opacity" />
             </Transition.Child>
 
             {/* This element is to trick the browser into centering the modal contents. */}
@@ -118,14 +118,14 @@ export default function ResetPassword({ user }) {
                     <div className="mt-2 space-y-4">
                       <input
                         type="password"
-                        className="shadow-sm focus:ring-ring focus:border-ring block w-full sm:text-sm border-border rounded-md"
+                        className="shadow-sm focus:ring-ring focus:border-ring block w-full sm:text-sm border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground"
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Enter users new password"
                       />
 
                       <input
                         type="password"
-                        className="shadow-sm focus:ring-ring focus:border-ring block w-full sm:text-sm border-border rounded-md"
+                        className="shadow-sm focus:ring-ring focus:border-ring block w-full sm:text-sm border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground"
                         onChange={(e) => setCheck(e.target.value)}
                         placeholder="Confirm users password"
                       />

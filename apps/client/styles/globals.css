@@ -148,8 +148,8 @@
 
 .bn-editor {
   padding-inline: 0px !important;
-  background-color: var(--background) !important;
-  color: var(--foreground) !important;
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
 }
 
 /* Add these styles to hide scrollbars site-wide */

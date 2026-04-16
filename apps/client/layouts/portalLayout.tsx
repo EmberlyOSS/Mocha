@@ -160,7 +160,7 @@ export default function PortalLayout({ children }: any) {
                       >
                         <span className="sr-only">Close sidebar</span>
                         <XMarkIcon
-                          className="h-6 w-6 text-white"
+                          className="h-6 w-6 text-foreground"
                           aria-hidden="true"
                         />
                       </button>
@@ -365,7 +365,7 @@ export default function PortalLayout({ children }: any) {
                 <Menu as="div" className="relative">
                   <Menu.Button className="z-50 flex items-center p-1.5">
                     <span className="sr-only">Open user menu</span>
-                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-muted0">
+                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-muted">
                       <span className="text-xs mt-0.5 font-medium leading-none text-white uppercase">
                         {user.name[0]}
                       </span>

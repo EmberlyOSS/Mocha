@@ -221,7 +221,7 @@ export default function Roles() {
               <CardTitle>Select Users</CardTitle>
               <div className="flex gap-2">
                 <button
-                  className="px-4 py-2 bg-muted0 text-white rounded"
+                  className="px-4 py-2 bg-primary text-primary-foreground rounded"
                   onClick={() => setStep(1)}
                 >
                   Back

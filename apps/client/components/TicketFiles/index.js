@@ -70,7 +70,7 @@ export default function TicketFiles({ id, uploaded, setUploaded }) {
                     <button
                       onClick={() => download(file)}
                       type="button"
-                      className="float-right  border border-transparent rounded-full shadow-sm hover:bg-muted0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring"
+                      className="float-right  border border-transparent rounded-full shadow-sm hover:bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring"
                     >
                       <DocumentDownloadIcon
                         className="h-5 w-5"

@@ -148,7 +148,7 @@ export default function AdminLayout({ children }: any) {
                         >
                           <span className="sr-only">Close sidebar</span>
                           <XMarkIcon
-                            className="w-6 h-6 text-white"
+                            className="w-6 h-6 text-foreground"
                             aria-hidden="true"
                           />
                         </button>

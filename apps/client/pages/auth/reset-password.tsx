@@ -70,7 +70,7 @@ export default function Login({}) {
   }
 
   return (
-    <div className="min-h-screen bg-muted flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground">
           Reset Password
@@ -97,7 +97,7 @@ export default function Login({}) {
                       autoComplete="off"
                       required
                       onChange={(e) => setCode(e.target.value)}
-                      className="appearance-none block w-full px-3 py-2 border border-border rounded-md shadow-sm placeholder-muted-foreground focus:outline-none focus:ring-ring focus:border-ring sm:text-sm"
+                      className="appearance-none block w-full px-3 py-2 border border-border rounded-md shadow-sm bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-ring focus:border-ring sm:text-sm"
                     />
                   </div>
                 </div>
@@ -129,7 +129,7 @@ export default function Login({}) {
                       autoComplete="off"
                       required
                       onChange={(e) => setPassword(e.target.value)}
-                      className="appearance-none block w-full px-3 py-2 border border-border rounded-md shadow-sm placeholder-muted-foreground focus:outline-none focus:ring-ring focus:border-ring sm:text-sm"
+                      className="appearance-none block w-full px-3 py-2 border border-border rounded-md shadow-sm bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-ring focus:border-ring sm:text-sm"
                     />
                   </div>
                 </div>
@@ -149,8 +149,8 @@ export default function Login({}) {
         </div>
 
         <div className="mt-8 text-center flex flex-col space-y-2">
-          <span className="font-bold">Built with ☕ by Emberly</span>
-          <a href="https://mocha-docs.embrly.ca/" target="_blank">
+          <span className="font-bold text-foreground">Built with ☕ by Emberly</span>
+          <a href="https://mocha-docs.embrly.ca/" target="_blank" className="text-muted-foreground hover:text-foreground transition-colors">
             Documentation
           </a>
         </div>

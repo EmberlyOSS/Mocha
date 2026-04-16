@@ -178,8 +178,8 @@ export default function Login({}) {
         )}
 
         <div className="mt-8 text-center flex flex-col space-y-2">
-          <span className="font-bold">Built with ☕ by Emberly</span>
-          <a href="https://mocha-docs.embrly.ca/" target="_blank">
+          <span className="font-bold text-foreground">Built with ☕ by Emberly</span>
+          <a href="https://mocha-docs.embrly.ca/" target="_blank" className="text-muted-foreground hover:text-foreground transition-colors">
             Documentation
           </a>
         </div>

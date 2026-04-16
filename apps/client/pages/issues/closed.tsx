@@ -600,7 +600,7 @@ export default function Tickets() {
                                 {ticket.priority}
                               </span>
                             </div>
-                            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-muted0">
+                            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-muted">
                               <span className="text-[11px] font-medium leading-none text-primary-foreground uppercase">
                                 {ticket.assignedTo
                                   ? ticket.assignedTo.name[0]

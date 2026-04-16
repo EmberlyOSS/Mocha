@@ -80,7 +80,7 @@ export default function Sessions() {
     <div className="p-6">
       <div className="flex flex-col space-y-1 mb-4">
         <h1 className="text-2xl font-bold">Active Sessions</h1>
-        <span className="text-sm text-foreground">
+        <span className="text-sm text-muted-foreground">
           Devices you are logged in to
         </span>
       </div>
@@ -89,21 +89,21 @@ export default function Sessions() {
           sessions.map((session) => (
             <div
               key={session.id}
-              className="flex flex-row items-center justify-between p-4 border rounded-lg group"
+              className="flex flex-row items-center justify-between p-4 border border-border rounded-lg bg-card group"
             >
               <div>
-                <div className="text-base font-bold">
+                <div className="text-base font-bold text-foreground">
                   {session.ipAddress === "::1"
                     ? "Localhost"
                     : session.ipAddress}
                 </div>
-                <div className="font-bold text-xs">
+                <div className="font-bold text-xs text-foreground">
                   {getPrettyUserAgent(session.userAgent)}
                 </div>
-                <div className="text-xs text-foreground">
+                <div className="text-xs text-muted-foreground">
                   Created: {new Date(session.createdAt).toLocaleString("en-GB")}
                 </div>
-                <div className="text-xs text-foreground">
+                <div className="text-xs text-muted-foreground">
                   Expires: {new Date(session.expires).toLocaleString("en-GB")}
                 </div>
               </div>

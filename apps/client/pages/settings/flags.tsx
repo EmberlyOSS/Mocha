@@ -67,14 +67,17 @@ export default function FeatureFlags() {
         {flags.map((flag) => (
           <div
             key={flag.name}
-            className="flex flex-row items-center justify-between p-4 border rounded-lg"
+            className="flex flex-row items-center justify-between p-4 border border-border rounded-lg bg-card"
           >
             <div>
-              <div className="font-bold text-sm">{flag.name}</div>
-              <div className="text-xs">{flag.description}</div>
+              <div className="font-bold text-sm text-foreground">{flag.name}</div>
+              <div className="text-xs text-muted-foreground">{flag.description}</div>
             </div>
             <div>
-              <button onClick={() => toggleFlag(flag.name)}>
+              <button
+                onClick={() => toggleFlag(flag.name)}
+                className="inline-flex items-center px-3 py-1.5 border border-border rounded-md text-xs font-semibold bg-card text-foreground hover:bg-accent transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
+              >
                 {flag.enabled ? "Disable" : "Enable"}
               </button>
             </div>

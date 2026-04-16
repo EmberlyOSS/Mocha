@@ -55,7 +55,7 @@ export default function UpdateClientModal({ client }) {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-muted0 bg-opacity-75 transition-opacity" />
+              <Dialog.Overlay className="fixed inset-0 bg-foreground/50 transition-opacity" />
             </Transition.Child>
 
             <span
@@ -95,7 +95,7 @@ export default function UpdateClientModal({ client }) {
                     <div className="mt-2 space-y-4">
                       <input
                         type="text"
-                        className="shadow-sm focus:ring-ring focus:border-ring block w-3/4 sm:text-sm border-border rounded-md"
+                        className="shadow-sm focus:ring-ring focus:border-ring block w-3/4 sm:text-sm border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground"
                         placeholder="Enter client name here..."
                         name="name"
                         onChange={(e) => setName(e.target.value)}
@@ -104,7 +104,7 @@ export default function UpdateClientModal({ client }) {
 
                       <input
                         type="email"
-                        className="shadow-sm focus:ring-ring focus:border-ring block w-full sm:text-sm border-border rounded-md"
+                        className="shadow-sm focus:ring-ring focus:border-ring block w-full sm:text-sm border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground"
                         placeholder="Enter email here...."
                         onChange={(e) => setEmail(e.target.value)}
                         value={email}
@@ -112,7 +112,7 @@ export default function UpdateClientModal({ client }) {
 
                       <input
                         type="text"
-                        className="shadow-sm focus:ring-ring focus:border-ring block w-full sm:text-sm border-border rounded-md"
+                        className="shadow-sm focus:ring-ring focus:border-ring block w-full sm:text-sm border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground"
                         placeholder="Enter client primary contact name here..."
                         onChange={(e) => setContactName(e.target.value)}
                         value={contactName}
@@ -120,7 +120,7 @@ export default function UpdateClientModal({ client }) {
 
                       <input
                         type="text"
-                        className="shadow-sm focus:ring-ring focus:border-ring block w-full sm:text-sm border-border rounded-md"
+                        className="shadow-sm focus:ring-ring focus:border-ring block w-full sm:text-sm border-border rounded-md bg-background text-foreground placeholder:text-muted-foreground"
                         placeholder="Enter client primary contact number here..."
                         onChange={(e) => setNumber(e.target.value)}
                         value={number}

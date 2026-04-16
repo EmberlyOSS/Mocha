@@ -48,7 +48,7 @@ export default function CreateUser() {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-muted0 bg-opacity-75 transition-opacity" />
+              <Dialog.Overlay className="fixed inset-0 bg-foreground/50 transition-opacity" />
             </Transition.Child>
 
             <span
