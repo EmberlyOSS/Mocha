@@ -48,7 +48,7 @@ function Auth({ children }: any) {
   }
 
   return (
-    <div className="flex h-screen justify-center items-center text-foreground"></div>
+    <div className="flex items-center justify-center h-screen text-foreground"></div>
   );
 }
 
