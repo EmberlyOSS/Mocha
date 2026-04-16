@@ -2,6 +2,7 @@
 import "@radix-ui/themes/styles.css";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
+import "prismjs/themes/prism.css";
 import "../styles/globals.css";
 
 import { ThemeProvider } from "next-themes";
