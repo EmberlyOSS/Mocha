@@ -1,43 +1,54 @@
-FROM node:lts AS builder
-
-# Set the working directory inside the container
+# ── builder: install deps and compile ───────────────────────────────────────
+FROM node:18-alpine AS builder
 WORKDIR /app
 
-RUN apt-get update && \
-    apt-get install -y build-essential python3
+RUN apk add --no-cache python3 make g++ openssl
+RUN corepack enable
 
-# Copy the package.json and package-lock.json files for both apps
-COPY apps/api/package*.json ./apps/api/
-COPY apps/client/package*.json ./apps/client/
-COPY ./ecosystem.config.js ./ecosystem.config.js
+# Copy manifests first (layer-cache friendly)
+COPY package.json yarn.lock .yarnrc.yml turbo.json ./
+COPY .yarn/patches ./.yarn/patches
+COPY apps/api/package.json ./apps/api/
+COPY apps/client/package.json ./apps/client/
+COPY apps/docs/package.json ./apps/docs/
+COPY apps/landing/package.json ./apps/landing/
+COPY packages/config/package.json ./packages/config/
+COPY packages/tsconfig/package.json ./packages/tsconfig/
 
-RUN npm i -g prisma
-RUN npm i -g typescript@latest -g --force 
+# Copy Prisma schema before install so postinstall `prisma generate` works
+COPY apps/api/src/prisma ./apps/api/src/prisma
 
-# Copy the source code for both apps
-COPY apps/api ./apps/api
-COPY apps/client ./apps/client
+# Install — postinstall runs prisma generate naturally
+# Save resolved lockfile before COPY . . overwrites it
+RUN yarn install --no-immutable && cp yarn.lock /tmp/yarn.lock.resolved
 
-RUN cd apps/api && npm install --production
-RUN cd apps/api && npm i --save-dev @types/node && npm run build
+# Copy full source, then restore the resolved lockfile (preserves patch entries)
+COPY . .
+RUN cp /tmp/yarn.lock.resolved ./yarn.lock
 
-RUN cd apps/client && yarn install --production --ignore-scripts --prefer-offline --network-timeout 1000000
-RUN cd apps/client && yarn add --dev typescript @types/node --network-timeout 1000000
-RUN cd apps/client && yarn build
+# Build API (TypeScript → dist/) and client (Next.js standalone)
+RUN yarn workspace api build
+RUN yarn workspace client build
 
-FROM node:lts AS runner
+# ── runner: minimal production image ────────────────────────────────────────
+FROM node:18-alpine AS runner
+WORKDIR /app
 
-COPY --from=builder /app/apps/api/ ./apps/api/
-COPY --from=builder /app/apps/client/.next/standalone ./apps/client
-COPY --from=builder /app/apps/client/.next/static ./apps/client/.next/static
-COPY --from=builder /app/apps/client/public ./apps/client/public
-COPY --from=builder /app/ecosystem.config.js ./ecosystem.config.js
-
-# Expose the ports for both apps
-EXPOSE 3000 5003
-
-# Install PM2 globally
+RUN apk add --no-cache openssl
 RUN npm install -g pm2
 
-# Start both apps using PM2
+COPY --from=builder /app/ecosystem.config.js ./ecosystem.config.js
+
+# API: compiled output + dependencies
+COPY --from=builder /app/apps/api/dist ./apps/api/dist
+COPY --from=builder /app/apps/api/node_modules ./apps/api/node_modules
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/apps/api/src/prisma ./apps/api/src/prisma
+
+# Client: Next.js standalone (copies to root so apps/client/server.js resolves)
+COPY --from=builder /app/apps/client/.next/standalone ./
+COPY --from=builder /app/apps/client/.next/static ./apps/client/.next/static
+COPY --from=builder /app/apps/client/public ./apps/client/public
+
+EXPOSE 3000 5003
 CMD ["pm2-runtime", "ecosystem.config.js"]
