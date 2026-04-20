@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useParams } from 'next/navigation';
-import { DocumentEditor } from '@/components/documents/document-editor';
+import { useParams } from "next/navigation";
+import { DocumentEditor } from "@/components/documents/document-editor";
 
 export default function DocumentDetailPage() {
   const params = useParams<{ id: string }>();

@@ -1,60 +1,60 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useQueryClient } from '@tanstack/react-query';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { api, formatDate } from '@/lib/api';
-import { useDocument } from '@/hooks/use-documents';
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useDocument } from "@/hooks/use-documents";
+import { api, formatDate } from "@/lib/api";
 
 export function DocumentEditor({ id }: { id: string }) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { data, isLoading } = useDocument(id);
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [status, setStatus] = useState('');
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [status, setStatus] = useState("");
 
   useEffect(() => {
     if (data?.note) {
       setTitle(data.note.title);
-      setContent(data.note.note ?? '');
+      setContent(data.note.note ?? "");
     }
   }, [data?.note]);
 
   const save = async () => {
-    setStatus('Saving...');
+    setStatus("Saving...");
     try {
       await api(`/api/v1/notebooks/note/${id}/update`, {
-        method: 'PUT',
+        method: "PUT",
         json: {
           title,
           content,
         },
       });
-      setStatus('Saved.');
+      setStatus("Saved.");
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['document', id] }),
-        queryClient.invalidateQueries({ queryKey: ['documents'] }),
+        queryClient.invalidateQueries({ queryKey: ["document", id] }),
+        queryClient.invalidateQueries({ queryKey: ["documents"] }),
       ]);
     } catch (error) {
-      console.error('Failed to save document', error);
-      setStatus('Save failed.');
+      console.error("Failed to save document", error);
+      setStatus("Save failed.");
     }
   };
 
   const remove = async () => {
-    if (!window.confirm('Delete this document?')) return;
+    if (!window.confirm("Delete this document?")) return;
     try {
       await api(`/api/v1/notebooks/note/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
-      await queryClient.invalidateQueries({ queryKey: ['documents'] });
-      router.replace('/documents');
+      await queryClient.invalidateQueries({ queryKey: ["documents"] });
+      router.replace("/documents");
     } catch (error) {
-      console.error('Failed to delete document', error);
-      setStatus('Delete failed.');
+      console.error("Failed to delete document", error);
+      setStatus("Delete failed.");
     }
   };
 

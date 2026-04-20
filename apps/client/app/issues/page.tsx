@@ -1,30 +1,32 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useMemo, useState } from 'react';
-import { Search } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Search } from "lucide-react";
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { useAllTickets } from '@/hooks/use-tickets';
-import type { Ticket } from '@/lib/types';
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { useAllTickets } from "@/hooks/use-tickets";
+import type { Ticket } from "@/lib/types";
 
 function badgeTone(ticket: Ticket) {
   const priority = ticket.priority?.toLowerCase();
-  if (priority === 'high') return 'bg-red-50 text-red-700';
-  if (priority === 'normal' || priority === 'medium') return 'bg-amber-50 text-amber-700';
-  return 'bg-blue-50 text-blue-700';
+  if (priority === "high") return "destructive";
+  if (priority === "normal" || priority === "medium") return "secondary";
+  return "outline";
 }
 
 export default function IssuesPage() {
   const { data, isLoading } = useAllTickets();
-  const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState<'all' | 'open' | 'closed'>('all');
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState<"all" | "open" | "closed">("all");
 
   const tickets = useMemo(() => {
     const source = data?.tickets ?? [];
@@ -36,9 +38,9 @@ export default function IssuesPage() {
         ticket.assignedTo?.name?.toLowerCase().includes(query.toLowerCase());
 
       const matchesFilter =
-        filter === 'all'
+        filter === "all"
           ? true
-          : filter === 'closed'
+          : filter === "closed"
             ? Boolean(ticket.isComplete)
             : !ticket.isComplete;
 
@@ -47,21 +49,22 @@ export default function IssuesPage() {
   }, [data?.tickets, filter, query]);
 
   return (
-    <div className="flex flex-col gap-6 p-6 lg:p-8">
-      <Card className="hover:shadow-xs">
-        <CardHeader className="gap-4 lg:flex-row lg:items-end lg:justify-between">
+    <div className="flex flex-col gap-6 p-0 max-w-6xl w-full">
+      <Card className="rounded-[2rem] border-border/60 bg-card/60 backdrop-blur-xl shadow-xs overflow-hidden">
+        <CardHeader className="gap-6 lg:flex-row lg:items-end lg:justify-between border-b border-border/40 bg-accent/20 px-8 py-6">
           <div>
-            <CardTitle>Issue workspace</CardTitle>
-            <CardDescription>
-              Migrated from the old `pages/issues` flow into the new client shell.
+            <CardTitle className="text-2xl">Issue workspace</CardTitle>
+            <CardDescription className="text-base mt-1">
+              Migrated from the old `pages/issues` flow into the new client
+              shell.
             </CardDescription>
           </div>
           <div className="flex flex-wrap gap-2">
-            {(['all', 'open', 'closed'] as const).map((value) => (
+            {(["all", "open", "closed"] as const).map((value) => (
               <Button
                 key={value}
-                variant={filter === value ? 'default' : 'outline'}
-                size="sm"
+                variant={filter === value ? "default" : "secondary"}
+                className={`rounded-full px-5 capitalize font-semibold ${filter === value ? "shadow-md" : ""}`}
                 onClick={() => setFilter(value)}
               >
                 {value}
@@ -69,55 +72,69 @@ export default function IssuesPage() {
             ))}
           </div>
         </CardHeader>
-        <CardContent>
-          <label className="flex items-center gap-3 rounded-2xl border border-border bg-background px-4 py-3">
-            <Search className="h-4 w-4 text-muted-foreground" />
-            <input
+        <CardContent className="p-8">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search by title, issue id, or assignee"
-              className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+              className="w-full pl-12 bg-background/50 h-14 rounded-2xl text-base shadow-sm border-border/80 focus-visible:ring-1"
             />
-          </label>
+          </div>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="rounded-[2rem] border-border/60 bg-card/60 backdrop-blur-xl shadow-xs overflow-hidden">
         <CardContent className="p-0">
           {isLoading ? (
-            <div className="px-6 py-16 text-center text-sm text-muted-foreground">
+            <div className="px-8 py-20 text-center font-medium text-muted-foreground">
               Loading issues...
             </div>
           ) : tickets.length ? (
-            <div className="divide-y divide-border">
+            <div className="divide-y divide-border/40">
               {tickets.map((ticket) => (
                 <Link
                   key={ticket.id}
                   href={`/issue/${ticket.id}`}
-                  className="grid gap-3 px-6 py-4 transition-colors hover:bg-accent lg:grid-cols-[minmax(0,1.5fr)_140px_140px_160px]"
+                  className="grid gap-4 px-8 py-5 transition-colors hover:bg-accent/40 lg:grid-cols-[minmax(0,1.5fr)_140px_140px_160px] items-center"
                 >
                   <div className="min-w-0">
-                    <p className="truncate font-medium">{ticket.title}</p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {ticket.id} · {ticket.assignedTo?.name ?? 'Unassigned'}
+                    <p className="truncate font-semibold text-base">
+                      {ticket.title}
+                    </p>
+                    <p className="mt-1 text-xs font-medium text-muted-foreground">
+                      <span className="text-foreground/70">{ticket.id}</span> ·{" "}
+                      {ticket.assignedTo?.name ?? "Unassigned"}
                     </p>
                   </div>
                   <div>
-                    <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${badgeTone(ticket)}`}>
-                      {ticket.priority ?? 'Low'}
-                    </span>
+                    <Badge
+                      variant={badgeTone(ticket) as any}
+                      className="capitalize px-3 py-0.5 rounded-full text-[11px] font-bold tracking-wide"
+                    >
+                      {ticket.priority ?? "Low"}
+                    </Badge>
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    {ticket.isComplete ? 'Closed' : 'Open'}
+                  <div className="text-sm font-semibold text-muted-foreground">
+                    {ticket.isComplete ? (
+                      <span className="text-emerald-500">Closed</span>
+                    ) : (
+                      <span className="text-blue-500">Open</span>
+                    )}
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    {new Date(ticket.createdAt).toLocaleDateString('en-GB')}
+                  <div className="text-sm font-medium text-muted-foreground">
+                    {new Date(ticket.createdAt).toLocaleDateString("en-GB", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
                   </div>
                 </Link>
               ))}
             </div>
           ) : (
-            <div className="px-6 py-16 text-center text-sm text-muted-foreground">
+            <div className="px-8 py-20 text-center font-medium text-muted-foreground">
               No issues matched the current filters.
             </div>
           )}

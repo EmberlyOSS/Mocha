@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useSession } from '@/lib/store';
+import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useSession } from "@/lib/store";
 
 const adminRoutes = [
-  { href: '/admin/clients', label: 'Clients' },
-  { href: '/admin/tickets', label: 'Tickets' },
-  { href: '/admin/roles', label: 'Roles' },
-  { href: '/admin/users/internal', label: 'Internal users' },
-  { href: '/admin/email-queues', label: 'Email queues' },
-  { href: '/admin/webhooks', label: 'Webhooks' },
-  { href: '/admin/logs', label: 'Logs' },
+  { href: "/admin/clients", label: "Clients" },
+  { href: "/admin/tickets", label: "Tickets" },
+  { href: "/admin/roles", label: "Roles" },
+  { href: "/admin/users/internal", label: "Internal users" },
+  { href: "/admin/email-queues", label: "Email queues" },
+  { href: "/admin/webhooks", label: "Webhooks" },
+  { href: "/admin/logs", label: "Logs" },
 ];
 
 export default function AdminPage() {
@@ -24,11 +24,11 @@ export default function AdminPage() {
           <CardTitle>Admin migration surface</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 text-sm text-muted-foreground">
-          <p>Signed in as: {user?.name ?? 'Unknown user'}</p>
+          <p>Signed in as: {user?.name ?? "Unknown user"}</p>
           <p>
-            The admin routes from `pages/admin/*` now resolve inside `mocha-client`.
-            High-traffic list views are wired up first; deeper create and edit flows still
-            need endpoint-specific UI.
+            The admin routes from `pages/admin/*` now resolve inside
+            `mocha-client`. High-traffic list views are wired up first; deeper
+            create and edit flows still need endpoint-specific UI.
           </p>
           <div className="grid gap-2 pt-2 md:grid-cols-2">
             {adminRoutes.map((route) => (

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useQueryClient } from '@tanstack/react-query';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { api, formatDate, getPrettyUserAgent } from '@/lib/api';
-import { useSessions } from '@/hooks/use-settings';
+import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useSessions } from "@/hooks/use-settings";
+import { api, formatDate, getPrettyUserAgent } from "@/lib/api";
 
 export default function SessionsPage() {
   const queryClient = useQueryClient();
@@ -13,11 +13,11 @@ export default function SessionsPage() {
   const revokeSession = async (sessionId: string) => {
     try {
       await api(`/api/v1/auth/sessions/${sessionId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
-      await queryClient.invalidateQueries({ queryKey: ['sessions'] });
+      await queryClient.invalidateQueries({ queryKey: ["sessions"] });
     } catch (error) {
-      console.error('Failed to revoke session', error);
+      console.error("Failed to revoke session", error);
     }
   };
 
@@ -40,13 +40,25 @@ export default function SessionsPage() {
               >
                 <div className="space-y-1 text-sm">
                   <p className="font-medium">
-                    {session.ipAddress === '::1' ? 'Localhost' : session.ipAddress}
+                    {session.ipAddress === "::1"
+                      ? "Localhost"
+                      : session.ipAddress}
                   </p>
-                  <p className="text-muted-foreground">{getPrettyUserAgent(session.userAgent)}</p>
-                  <p className="text-muted-foreground">Created: {formatDate(session.createdAt)}</p>
-                  <p className="text-muted-foreground">Expires: {formatDate(session.expires)}</p>
+                  <p className="text-muted-foreground">
+                    {getPrettyUserAgent(session.userAgent)}
+                  </p>
+                  <p className="text-muted-foreground">
+                    Created: {formatDate(session.createdAt)}
+                  </p>
+                  <p className="text-muted-foreground">
+                    Expires: {formatDate(session.expires)}
+                  </p>
                 </div>
-                <Button variant="destructive" size="sm" onClick={() => void revokeSession(session.id)}>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => void revokeSession(session.id)}
+                >
                   Revoke
                 </Button>
               </div>

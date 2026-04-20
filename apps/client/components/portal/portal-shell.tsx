@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const links = [
-  { href: '/portal', label: 'Overview' },
-  { href: '/portal/issues', label: 'All issues' },
-  { href: '/portal/issues/open', label: 'Open' },
-  { href: '/portal/issues/closed', label: 'Closed' },
-  { href: '/portal/new', label: 'New issue' },
+  { href: "/portal", label: "Overview" },
+  { href: "/portal/issues", label: "All issues" },
+  { href: "/portal/issues/open", label: "Open" },
+  { href: "/portal/issues/closed", label: "Closed" },
+  { href: "/portal/new", label: "New issue" },
 ];
 
 export function PortalShell({ children }: { children: React.ReactNode }) {
@@ -32,10 +32,10 @@ export function PortalShell({ children }: { children: React.ReactNode }) {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  'rounded-full border px-3 py-2 text-sm font-medium transition-colors',
+                  "rounded-full border px-3 py-2 text-sm font-medium transition-colors",
                   active
-                    ? 'border-primary bg-primary text-primary-foreground'
-                    : 'border-border bg-background hover:bg-accent',
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-background hover:bg-accent",
                 )}
               >
                 {link.label}

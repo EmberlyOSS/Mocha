@@ -1,7 +1,13 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface AuthShellProps {
   title: string;
@@ -13,7 +19,12 @@ interface AuthShellProps {
   };
 }
 
-export function AuthShell({ title, description, children, footerLink }: AuthShellProps) {
+export function AuthShell({
+  title,
+  description,
+  children,
+  footerLink,
+}: AuthShellProps) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.18),_transparent_35%),linear-gradient(180deg,_rgba(248,250,252,1)_0%,_rgba(241,245,249,1)_100%)] px-4 py-10">
       <Card className="w-full max-w-md border-white/70 bg-white/90 shadow-xl backdrop-blur">

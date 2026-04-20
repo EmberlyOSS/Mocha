@@ -1,45 +1,48 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { api } from '@/lib/api';
+} from "@/components/ui/card";
+import { api } from "@/lib/api";
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState('');
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async () => {
     setSubmitting(true);
-    setStatus('');
+    setStatus("");
 
     try {
-      const result = await api<{ success?: boolean }>('/api/v1/auth/password-reset', {
-        method: 'POST',
-        auth: false,
-        json: { email, link: window.location.origin },
-      });
+      const result = await api<{ success?: boolean }>(
+        "/api/v1/auth/password-reset",
+        {
+          method: "POST",
+          auth: false,
+          json: { email, link: window.location.origin },
+        },
+      );
 
       if (result.success) {
-        setStatus('Password reset email sent.');
-        router.replace('/auth/login');
+        setStatus("Password reset email sent.");
+        router.replace("/auth/login");
         return;
       }
 
-      setStatus('Password reset request failed.');
+      setStatus("Password reset request failed.");
     } catch (error) {
-      console.error('Password reset failed', error);
-      setStatus('Password reset request failed.');
+      console.error("Password reset failed", error);
+      setStatus("Password reset request failed.");
     } finally {
       setSubmitting(false);
     }
@@ -50,7 +53,9 @@ export default function ForgotPasswordPage() {
       <Card className="w-full max-w-md border-white/70 bg-white/90 shadow-xl backdrop-blur">
         <CardHeader>
           <CardTitle>Reset password</CardTitle>
-          <CardDescription>Send a password reset link to your email.</CardDescription>
+          <CardDescription>
+            Send a password reset link to your email.
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
@@ -68,10 +73,17 @@ export default function ForgotPasswordPage() {
             </div>
           ) : null}
           <div className="space-y-3">
-            <Button className="w-full" onClick={() => void handleSubmit()} disabled={submitting}>
-              {submitting ? 'Submitting...' : 'Submit request'}
+            <Button
+              className="w-full"
+              onClick={() => void handleSubmit()}
+              disabled={submitting}
+            >
+              {submitting ? "Submitting..." : "Submit request"}
             </Button>
-            <Link href="/auth/login" className="block text-center text-sm text-muted-foreground hover:text-foreground">
+            <Link
+              href="/auth/login"
+              className="block text-center text-sm text-muted-foreground hover:text-foreground"
+            >
               Back to login
             </Link>
           </div>

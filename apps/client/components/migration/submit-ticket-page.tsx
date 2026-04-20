@@ -1,60 +1,79 @@
-'use client';
+"use client";
 
-import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { api } from '@/lib/api';
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { api } from "@/lib/api";
 
-const ticketTypes = ['Incident', 'Service', 'Feature', 'Bug', 'Maintenance', 'Access', 'Feedback'];
+const ticketTypes = [
+  "Incident",
+  "Service",
+  "Feature",
+  "Bug",
+  "Maintenance",
+  "Access",
+  "Feedback",
+];
 
 export function SubmitTicketPageClient() {
   const searchParams = useSearchParams();
-  const companyId = searchParams.get('id');
-  const [status, setStatus] = useState('');
-  const [submittedId, setSubmittedId] = useState('');
+  const companyId = searchParams.get("id");
+  const [status, setStatus] = useState("");
+  const [submittedId, setSubmittedId] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    description: '',
-    priority: 'Low',
-    type: 'Feature',
+    name: "",
+    email: "",
+    subject: "",
+    description: "",
+    priority: "Low",
+    type: "Feature",
   });
 
   const submit = async () => {
     if (!companyId) {
-      setStatus('Missing company id. Open this page with `?id=<company-id>`.');
+      setStatus("Missing company id. Open this page with `?id=<company-id>`.");
       return;
     }
 
     setSubmitting(true);
-    setStatus('');
+    setStatus("");
 
     try {
-      const response = await api<{ success?: boolean; id?: string }>('/api/v1/ticket/public/create', {
-        method: 'POST',
-        auth: false,
-        json: {
-          name: form.name,
-          title: form.subject,
-          company: companyId,
-          email: form.email,
-          detail: form.description,
-          priority: form.priority,
-          type: form.type,
+      const response = await api<{ success?: boolean; id?: string }>(
+        "/api/v1/ticket/public/create",
+        {
+          method: "POST",
+          auth: false,
+          json: {
+            name: form.name,
+            title: form.subject,
+            company: companyId,
+            email: form.email,
+            detail: form.description,
+            priority: form.priority,
+            type: form.type,
+          },
         },
-      });
+      );
 
       if (response.success) {
-        setSubmittedId(response.id ?? '');
-        setStatus('Ticket submitted successfully.');
+        setSubmittedId(response.id ?? "");
+        setStatus("Ticket submitted successfully.");
       } else {
-        setStatus('Please fill out all fields and try again.');
+        setStatus("Please fill out all fields and try again.");
       }
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : 'Ticket submission failed.');
+      setStatus(
+        error instanceof Error ? error.message : "Ticket submission failed.",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -73,7 +92,9 @@ export function SubmitTicketPageClient() {
           <Field label="Name">
             <input
               value={form.name}
-              onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
+              onChange={(event) =>
+                setForm((current) => ({ ...current, name: event.target.value }))
+              }
               className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none"
             />
           </Field>
@@ -81,14 +102,24 @@ export function SubmitTicketPageClient() {
             <input
               type="email"
               value={form.email}
-              onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  email: event.target.value,
+                }))
+              }
               className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none"
             />
           </Field>
           <Field label="Subject">
             <input
               value={form.subject}
-              onChange={(event) => setForm((current) => ({ ...current, subject: event.target.value }))}
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  subject: event.target.value,
+                }))
+              }
               className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none"
             />
           </Field>
@@ -96,7 +127,12 @@ export function SubmitTicketPageClient() {
             <Field label="Issue type">
               <select
                 value={form.type}
-                onChange={(event) => setForm((current) => ({ ...current, type: event.target.value }))}
+                onChange={(event) =>
+                  setForm((current) => ({
+                    ...current,
+                    type: event.target.value,
+                  }))
+                }
                 className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none"
               >
                 {ticketTypes.map((type) => (
@@ -109,7 +145,12 @@ export function SubmitTicketPageClient() {
             <Field label="Priority">
               <select
                 value={form.priority}
-                onChange={(event) => setForm((current) => ({ ...current, priority: event.target.value }))}
+                onChange={(event) =>
+                  setForm((current) => ({
+                    ...current,
+                    priority: event.target.value,
+                  }))
+                }
                 className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none"
               >
                 <option value="Low">Low</option>
@@ -122,7 +163,12 @@ export function SubmitTicketPageClient() {
             <textarea
               rows={6}
               value={form.description}
-              onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))}
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  description: event.target.value,
+                }))
+              }
               className="w-full rounded-2xl border border-border bg-background px-3 py-2 text-sm outline-none"
             />
           </Field>
@@ -131,7 +177,7 @@ export function SubmitTicketPageClient() {
               {submittedId ? `Ticket id: ${submittedId}` : status}
             </p>
             <Button onClick={() => void submit()} disabled={submitting}>
-              {submitting ? 'Submitting...' : 'Submit ticket'}
+              {submitting ? "Submitting..." : "Submit ticket"}
             </Button>
           </div>
         </CardContent>
@@ -140,7 +186,13 @@ export function SubmitTicketPageClient() {
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="space-y-2">
       <label className="text-sm font-medium">{label}</label>

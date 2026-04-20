@@ -1,6 +1,12 @@
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export function NotFoundScreen() {
   return (
@@ -10,10 +16,12 @@ export function NotFoundScreen() {
           <div className="text-sm font-semibold uppercase tracking-[0.3em] text-muted-foreground">
             Error 404
           </div>
-          <CardTitle className="text-3xl">This route is not available</CardTitle>
+          <CardTitle className="text-3xl">
+            This route is not available
+          </CardTitle>
           <CardDescription>
-            The old client had a custom 404 page. This version now exists in the new
-            `mocha-client` shell too.
+            The old client had a custom 404 page. This version now exists in the
+            new `mocha-client` shell too.
           </CardDescription>
         </CardHeader>
         <CardContent className="flex justify-center gap-3">

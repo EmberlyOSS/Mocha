@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,43 +9,52 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { api } from '@/lib/api';
-import { setUser, useSession } from '@/lib/store';
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { api } from "@/lib/api";
+import { setUser, useSession } from "@/lib/store";
 
 const languages = [
-  { value: 'en', label: 'English' },
-  { value: 'de', label: 'German' },
-  { value: 'se', label: 'Swedish' },
-  { value: 'es', label: 'Spanish' },
-  { value: 'no', label: 'Norwegian' },
-  { value: 'fr', label: 'French' },
-  { value: 'tl', label: 'Tagalong' },
-  { value: 'da', label: 'Danish' },
-  { value: 'pt', label: 'Portuguese' },
-  { value: 'it', label: 'Italiano' },
-  { value: 'he', label: 'Hebrew' },
-  { value: 'tr', label: 'Turkish' },
-  { value: 'hu', label: 'Hungarian' },
-  { value: 'th', label: 'Thai' },
-  { value: 'zh-CN', label: 'Simplified Chinese' },
+  { value: "en", label: "English" },
+  { value: "de", label: "German" },
+  { value: "se", label: "Swedish" },
+  { value: "es", label: "Spanish" },
+  { value: "no", label: "Norwegian" },
+  { value: "fr", label: "French" },
+  { value: "tl", label: "Tagalog" },
+  { value: "da", label: "Danish" },
+  { value: "pt", label: "Portuguese" },
+  { value: "it", label: "Italiano" },
+  { value: "he", label: "Hebrew" },
+  { value: "tr", label: "Turkish" },
+  { value: "hu", label: "Hungarian" },
+  { value: "th", label: "Thai" },
+  { value: "zh-CN", label: "Simplified Chinese" },
 ];
 
 export default function ProfilePage() {
   const { user } = useSession();
-  const [name, setName] = useState(user?.name ?? '');
-  const [email, setEmail] = useState(user?.email ?? '');
-  const [language, setLanguage] = useState(user?.language ?? 'en');
-  const [status, setStatus] = useState('');
+  const [name, setName] = useState(user?.name ?? "");
+  const [email, setEmail] = useState(user?.email ?? "");
+  const [language, setLanguage] = useState(user?.language ?? "en");
+  const [status, setStatus] = useState("");
 
   if (!user) return null;
 
   const updateProfile = async () => {
-    setStatus('Saving...');
+    setStatus("Saving...");
 
     try {
-      await api('/api/v1/auth/profile', {
-        method: 'PUT',
+      await api("/api/v1/auth/profile", {
+        method: "PUT",
         json: {
           id: user.id,
           name,
@@ -60,56 +69,67 @@ export default function ProfilePage() {
         email,
         language,
       });
-      setStatus('Profile saved.');
+      setStatus("Profile saved.");
     } catch (error) {
-      console.error('Failed to update profile', error);
-      setStatus('Profile update failed.');
+      console.error("Failed to update profile", error);
+      setStatus("Profile update failed.");
     }
   };
 
   return (
-    <div className="p-6 lg:p-8">
-      <Card className="max-w-2xl">
-        <CardHeader>
-          <CardTitle>Profile</CardTitle>
+    <div className="p-0">
+      <Card className="max-w-2xl rounded-[2rem] border-border/60 bg-card/60 backdrop-blur-xl shadow-xs overflow-hidden">
+        <CardHeader className="bg-accent/20 border-b border-border/40 pb-6">
+          <CardTitle className="text-2xl">Profile</CardTitle>
           <CardDescription>Update your basic account details.</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-5">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Name</label>
-            <input
+        <CardContent className="space-y-6 pt-6 px-8">
+          <div className="space-y-3">
+            <Label>Name</Label>
+            <Input
               value={name}
               onChange={(event) => setName(event.target.value)}
-              className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none"
+              className="bg-background/50 h-11 px-4 text-base rounded-xl"
             />
           </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Email</label>
-            <input
+          <div className="space-y-3">
+            <Label>Email</Label>
+            <Input
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none"
+              className="bg-background/50 h-11 px-4 text-base rounded-xl"
             />
           </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Language</label>
-            <select
-              value={language}
-              onChange={(event) => setLanguage(event.target.value)}
-              className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none"
-            >
-              {languages.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+          <div className="space-y-3">
+            <Label>Language</Label>
+            <Select value={language} onValueChange={setLanguage}>
+              <SelectTrigger className="bg-background/50 h-11 px-4 rounded-xl text-base">
+                <SelectValue placeholder="Select language" />
+              </SelectTrigger>
+              <SelectContent>
+                {languages.map((option) => (
+                  <SelectItem
+                    key={option.value}
+                    value={option.value}
+                    className="cursor-pointer"
+                  >
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </CardContent>
-        <CardFooter className="justify-between gap-3">
-          <p className="text-sm text-muted-foreground">{status}</p>
-          <Button onClick={() => void updateProfile()}>Save profile</Button>
+        <CardFooter className="justify-between gap-3 border-t border-border/40 bg-accent/10 px-8 py-5 mt-4">
+          <p className="text-sm font-medium text-muted-foreground">{status}</p>
+          <Button
+            size="lg"
+            className="rounded-full px-8"
+            onClick={() => void updateProfile()}
+          >
+            Save profile
+          </Button>
         </CardFooter>
       </Card>
     </div>

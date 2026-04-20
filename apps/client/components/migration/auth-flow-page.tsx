@@ -1,29 +1,29 @@
-'use client';
+"use client";
 
-import { setCookie } from 'cookies-next';
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { AuthShell } from '@/components/migration/auth-shell';
-import { api } from '@/lib/api';
+import { setCookie } from "cookies-next";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { AuthShell } from "@/components/migration/auth-shell";
+import { Button } from "@/components/ui/button";
+import { api } from "@/lib/api";
 
 const languages = [
-  { value: 'en', label: 'English' },
-  { value: 'de', label: 'German' },
-  { value: 'se', label: 'Swedish' },
-  { value: 'es', label: 'Spanish' },
-  { value: 'no', label: 'Norwegian' },
-  { value: 'fr', label: 'French' },
-  { value: 'tl', label: 'Tagalong' },
-  { value: 'da', label: 'Danish' },
-  { value: 'pt', label: 'Portuguese' },
-  { value: 'it', label: 'Italiano' },
-  { value: 'he', label: 'Hebrew' },
-  { value: 'tr', label: 'Turkish' },
-  { value: 'hu', label: 'Hungarian' },
-  { value: 'th', label: 'Thai' },
-  { value: 'zh-CN', label: 'Simplified Chinese' },
+  { value: "en", label: "English" },
+  { value: "de", label: "German" },
+  { value: "se", label: "Swedish" },
+  { value: "es", label: "Spanish" },
+  { value: "no", label: "Norwegian" },
+  { value: "fr", label: "French" },
+  { value: "tl", label: "Tagalong" },
+  { value: "da", label: "Danish" },
+  { value: "pt", label: "Portuguese" },
+  { value: "it", label: "Italiano" },
+  { value: "he", label: "Hebrew" },
+  { value: "tr", label: "Turkish" },
+  { value: "hu", label: "Hungarian" },
+  { value: "th", label: "Thai" },
+  { value: "zh-CN", label: "Simplified Chinese" },
 ];
 
 function isValidEmail(email: string) {
@@ -32,30 +32,30 @@ function isValidEmail(email: string) {
 
 function RegisterFlow() {
   const router = useRouter();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [language, setLanguage] = useState('en');
-  const [status, setStatus] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [language, setLanguage] = useState("en");
+  const [status, setStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const submit = async () => {
     if (!isValidEmail(email)) {
-      setStatus('Enter a valid email address.');
+      setStatus("Enter a valid email address.");
       return;
     }
     if (!password || password !== passwordConfirm) {
-      setStatus('Passwords must match.');
+      setStatus("Passwords must match.");
       return;
     }
 
     setSubmitting(true);
-    setStatus('');
+    setStatus("");
 
     try {
-      await api('/api/v1/auth/user/register/external', {
-        method: 'POST',
+      await api("/api/v1/auth/user/register/external", {
+        method: "POST",
         auth: false,
         json: {
           name,
@@ -66,9 +66,11 @@ function RegisterFlow() {
         },
       });
 
-      router.replace('/auth/login');
+      router.replace("/auth/login");
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : 'Registration failed.');
+      setStatus(
+        error instanceof Error ? error.message : "Registration failed.",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -78,7 +80,7 @@ function RegisterFlow() {
     <AuthShell
       title="Create your account"
       description="External user registration migrated into the new client shell."
-      footerLink={{ href: '/auth/login', label: 'Back to sign in' }}
+      footerLink={{ href: "/auth/login", label: "Back to sign in" }}
     >
       <div className="space-y-2">
         <label className="text-sm font-medium">Name</label>
@@ -134,8 +136,12 @@ function RegisterFlow() {
           {status}
         </div>
       ) : null}
-      <Button className="w-full" onClick={() => void submit()} disabled={submitting}>
-        {submitting ? 'Creating account...' : 'Create account'}
+      <Button
+        className="w-full"
+        onClick={() => void submit()}
+        disabled={submitting}
+      >
+        {submitting ? "Creating account..." : "Create account"}
       </Button>
     </AuthShell>
   );
@@ -144,33 +150,33 @@ function RegisterFlow() {
 function ResetPasswordFlow() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [code, setCode] = useState('');
-  const [password, setPassword] = useState('');
-  const [step, setStep] = useState<'code' | 'password'>('code');
-  const [status, setStatus] = useState('');
+  const [code, setCode] = useState("");
+  const [password, setPassword] = useState("");
+  const [step, setStep] = useState<"code" | "password">("code");
+  const [status, setStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const token = searchParams.get('token');
+  const token = searchParams.get("token");
 
   const verifyCode = async () => {
     if (!token) {
-      setStatus('Missing reset token.');
+      setStatus("Missing reset token.");
       return;
     }
 
     setSubmitting(true);
-    setStatus('');
+    setStatus("");
 
     try {
-      await api('/api/v1/auth/password-reset/code', {
-        method: 'POST',
+      await api("/api/v1/auth/password-reset/code", {
+        method: "POST",
         auth: false,
         json: { code, uuid: token },
       });
-      setStep('password');
-      setStatus('Code accepted. Set a new password.');
+      setStep("password");
+      setStatus("Code accepted. Set a new password.");
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : 'Invalid reset code.');
+      setStatus(error instanceof Error ? error.message : "Invalid reset code.");
     } finally {
       setSubmitting(false);
     }
@@ -178,22 +184,24 @@ function ResetPasswordFlow() {
 
   const updatePassword = async () => {
     if (!password) {
-      setStatus('Password cannot be empty.');
+      setStatus("Password cannot be empty.");
       return;
     }
 
     setSubmitting(true);
-    setStatus('');
+    setStatus("");
 
     try {
-      await api('/api/v1/auth/password-reset/password', {
-        method: 'POST',
+      await api("/api/v1/auth/password-reset/password", {
+        method: "POST",
         auth: false,
         json: { code, password },
       });
-      router.replace('/auth/login');
+      router.replace("/auth/login");
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : 'Password update failed.');
+      setStatus(
+        error instanceof Error ? error.message : "Password update failed.",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -203,9 +211,9 @@ function ResetPasswordFlow() {
     <AuthShell
       title="Reset password"
       description="Migrated password reset flow for email reset links."
-      footerLink={{ href: '/auth/login', label: 'Back to sign in' }}
+      footerLink={{ href: "/auth/login", label: "Back to sign in" }}
     >
-      {step === 'code' ? (
+      {step === "code" ? (
         <>
           <div className="space-y-2">
             <label className="text-sm font-medium">Verification code</label>
@@ -215,8 +223,12 @@ function ResetPasswordFlow() {
               className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none"
             />
           </div>
-          <Button className="w-full" onClick={() => void verifyCode()} disabled={submitting}>
-            {submitting ? 'Checking code...' : 'Check code'}
+          <Button
+            className="w-full"
+            onClick={() => void verifyCode()}
+            disabled={submitting}
+          >
+            {submitting ? "Checking code..." : "Check code"}
           </Button>
         </>
       ) : (
@@ -230,8 +242,12 @@ function ResetPasswordFlow() {
               className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none"
             />
           </div>
-          <Button className="w-full" onClick={() => void updatePassword()} disabled={submitting}>
-            {submitting ? 'Updating password...' : 'Change password'}
+          <Button
+            className="w-full"
+            onClick={() => void updatePassword()}
+            disabled={submitting}
+          >
+            {submitting ? "Updating password..." : "Change password"}
           </Button>
         </>
       )}
@@ -255,7 +271,7 @@ function CallbackFlow({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [status, setStatus] = useState('Checking callback...');
+  const [status, setStatus] = useState("Checking callback...");
 
   const queryString = useMemo(() => {
     const params = new URLSearchParams(searchParams.toString());
@@ -265,25 +281,26 @@ function CallbackFlow({
   useEffect(() => {
     const run = async () => {
       if (!queryString) {
-        setStatus('Waiting for provider callback parameters.');
+        setStatus("Waiting for provider callback parameters.");
         return;
       }
 
       try {
-        const response = await api<{ success?: boolean; token?: string; onboarding?: boolean }>(
-          `${callback}?${queryString}`,
-          { auth: false },
-        );
+        const response = await api<{
+          success?: boolean;
+          token?: string;
+          onboarding?: boolean;
+        }>(`${callback}?${queryString}`, { auth: false });
 
         if (!response.success || !response.token) {
-          router.replace('/auth/login?error=account_not_found');
+          router.replace("/auth/login?error=account_not_found");
           return;
         }
 
-        setCookie('session', response.token, { maxAge: 60 * 60 * 24 * 6 });
-        router.replace(response.onboarding ? '/onboarding' : '/');
+        setCookie("session", response.token, { maxAge: 60 * 60 * 24 * 6 });
+        router.replace(response.onboarding ? "/onboarding" : "/");
       } catch {
-        router.replace('/auth/login?error=account_not_found');
+        router.replace("/auth/login?error=account_not_found");
       }
     };
 
@@ -305,15 +322,15 @@ function CallbackFlow({
 }
 
 export function AuthFlowPageClient({ flow }: { flow: string }) {
-  if (flow === 'register') {
+  if (flow === "register") {
     return <RegisterFlow />;
   }
 
-  if (flow === 'reset-password') {
+  if (flow === "reset-password") {
     return <ResetPasswordFlow />;
   }
 
-  if (flow === 'oauth') {
+  if (flow === "oauth") {
     return (
       <CallbackFlow
         title="Completing OAuth sign in"
@@ -323,7 +340,7 @@ export function AuthFlowPageClient({ flow }: { flow: string }) {
     );
   }
 
-  if (flow === 'oidc') {
+  if (flow === "oidc") {
     return (
       <CallbackFlow
         title="Completing OIDC sign in"
@@ -334,7 +351,10 @@ export function AuthFlowPageClient({ flow }: { flow: string }) {
   }
 
   return (
-    <AuthShell title="Unsupported auth route" description={`No migrated auth flow exists for "${flow}".`}>
+    <AuthShell
+      title="Unsupported auth route"
+      description={`No migrated auth flow exists for "${flow}".`}
+    >
       <div className="text-center text-sm text-muted-foreground">
         <Link href="/auth/login" className="hover:text-foreground">
           Back to sign in

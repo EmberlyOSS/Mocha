@@ -1,38 +1,41 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { setCookie } from 'cookies-next';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
+import { setCookie } from "cookies-next";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { api } from '@/lib/api';
+} from "@/components/ui/card";
+import { api } from "@/lib/api";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [oidcUrl, setOidcUrl] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [oidcUrl, setOidcUrl] = useState("");
+  const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const loadOidcUrl = async () => {
       try {
-        const data = await api<{ success?: boolean; url?: string }>('/api/v1/auth/check', {
-          auth: false,
-        });
+        const data = await api<{ success?: boolean; url?: string }>(
+          "/api/v1/auth/check",
+          {
+            auth: false,
+          },
+        );
         if (data.success && data.url) {
           setOidcUrl(data.url);
         }
       } catch (loadError) {
-        console.error('Failed to load auth config', loadError);
+        console.error("Failed to load auth config", loadError);
       }
     };
 
@@ -41,44 +44,44 @@ export default function LoginPage() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('error')) {
+    if (params.get("error")) {
       setError(
-        'SSO login failed because no matching account was found. Ask an admin to provision the account first.',
+        "SSO login failed because no matching account was found. Ask an admin to provision the account first.",
       );
     }
   }, []);
 
   const handleLogin = async () => {
     setSubmitting(true);
-    setError('');
+    setError("");
 
     try {
-      const result = await api<{ user?: { external_user?: boolean; firstLogin?: boolean }; token?: string }>(
-        '/api/v1/auth/login',
-        {
-          method: 'POST',
-          auth: false,
-          json: { email, password },
-        },
-      );
+      const result = await api<{
+        user?: { external_user?: boolean; firstLogin?: boolean };
+        token?: string;
+      }>("/api/v1/auth/login", {
+        method: "POST",
+        auth: false,
+        json: { email, password },
+      });
 
       if (!result.user || !result.token) {
-        setError('Login failed. Check the credentials and try again.');
+        setError("Login failed. Check the credentials and try again.");
         return;
       }
 
-      setCookie('session', result.token);
+      setCookie("session", result.token);
 
       if (result.user.external_user) {
-        router.replace('/portal');
+        router.replace("/portal");
         return;
       }
 
-      router.replace(result.user.firstLogin ? '/onboarding' : '/');
+      router.replace(result.user.firstLogin ? "/onboarding" : "/");
       router.refresh();
     } catch (loginError) {
-      console.error('Login failed', loginError);
-      setError('Login failed. Check the credentials and try again.');
+      console.error("Login failed", loginError);
+      setError("Login failed. Check the credentials and try again.");
     } finally {
       setSubmitting(false);
     }
@@ -116,7 +119,7 @@ export default function LoginPage() {
               onChange={(event) => setPassword(event.target.value)}
               className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none ring-0 transition focus:border-foreground/30"
               onKeyDown={(event) => {
-                if (event.key === 'Enter') {
+                if (event.key === "Enter") {
                   void handleLogin();
                 }
               }}
@@ -128,16 +131,27 @@ export default function LoginPage() {
             </div>
           ) : null}
           <div className="flex items-center justify-between text-sm">
-            <Link href="/auth/forgot-password" className="text-muted-foreground hover:text-foreground">
+            <Link
+              href="/auth/forgot-password"
+              className="text-muted-foreground hover:text-foreground"
+            >
               Forgot password?
             </Link>
           </div>
           <div className="space-y-3">
-            <Button className="w-full" onClick={() => void handleLogin()} disabled={submitting}>
-              {submitting ? 'Signing in...' : 'Sign in'}
+            <Button
+              className="w-full"
+              onClick={() => void handleLogin()}
+              disabled={submitting}
+            >
+              {submitting ? "Signing in..." : "Sign in"}
             </Button>
             {oidcUrl ? (
-              <Button variant="outline" className="w-full" onClick={() => router.push(oidcUrl)}>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => router.push(oidcUrl)}
+              >
                 Sign in with OIDC
               </Button>
             ) : null}

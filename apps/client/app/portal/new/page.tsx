@@ -1,55 +1,66 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PortalShell } from '@/components/portal/portal-shell';
-import { api } from '@/lib/api';
-import { useSession } from '@/lib/store';
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { PortalShell } from "@/components/portal/portal-shell";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { api } from "@/lib/api";
+import { useSession } from "@/lib/store";
 
-const issueTypes = ['Incident', 'Service', 'Feature', 'Bug', 'Maintenance', 'Access', 'Feedback'];
-const priorities = ['Low', 'Medium', 'High'];
+const issueTypes = [
+  "Incident",
+  "Service",
+  "Feature",
+  "Bug",
+  "Maintenance",
+  "Access",
+  "Feedback",
+];
+const priorities = ["Low", "Medium", "High"];
 
 export default function PortalNewIssuePage() {
   const router = useRouter();
   const { user } = useSession();
-  const [subject, setSubject] = useState('');
-  const [description, setDescription] = useState('');
-  const [issueType, setIssueType] = useState('Bug');
-  const [priority, setPriority] = useState('Low');
-  const [status, setStatus] = useState('');
+  const [subject, setSubject] = useState("");
+  const [description, setDescription] = useState("");
+  const [issueType, setIssueType] = useState("Bug");
+  const [priority, setPriority] = useState("Low");
+  const [status, setStatus] = useState("");
 
   const submit = async () => {
     if (!user) return;
-    setStatus('Submitting...');
+    setStatus("Submitting...");
     try {
-      const result = await api<{ success?: boolean; id?: string }>('/api/v1/ticket/create', {
-        method: 'POST',
-        auth: false,
-        json: {
-          name: user.name,
-          title: subject,
-          email: user.email,
-          detail: description,
-          priority,
-          type: issueType,
-          createdBy: {
-            id: user.id,
+      const result = await api<{ success?: boolean; id?: string }>(
+        "/api/v1/ticket/create",
+        {
+          method: "POST",
+          auth: false,
+          json: {
             name: user.name,
+            title: subject,
             email: user.email,
+            detail: description,
+            priority,
+            type: issueType,
+            createdBy: {
+              id: user.id,
+              name: user.name,
+              email: user.email,
+            },
           },
         },
-      });
+      );
       if (result.success) {
-        router.replace(result.id ? `/portal/issue/${result.id}` : '/portal');
+        router.replace(result.id ? `/portal/issue/${result.id}` : "/portal");
         return;
       }
-      setStatus('Ticket creation failed.');
+      setStatus("Ticket creation failed.");
     } catch (error) {
-      console.error('Failed to create portal issue', error);
-      setStatus('Ticket creation failed.');
+      console.error("Failed to create portal issue", error);
+      setStatus("Ticket creation failed.");
     }
   };
 

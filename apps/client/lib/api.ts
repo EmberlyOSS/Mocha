@@ -1,4 +1,4 @@
-import { getCookie, deleteCookie } from "cookies-next";
+import { deleteCookie, getCookie } from "cookies-next";
 
 export class ApiError extends Error {
   status: number;
@@ -15,6 +15,8 @@ type RequestInitWithJson = RequestInit & {
   auth?: boolean;
 };
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "";
+
 export async function api<T>(
   input: string,
   init: RequestInitWithJson = {},
@@ -30,7 +32,9 @@ export async function api<T>(
     requestHeaders.set("Authorization", `Bearer ${token}`);
   }
 
-  const response = await fetch(input, {
+  const url = input.startsWith("/") ? `${API_BASE}${input}` : input;
+
+  const response = await fetch(url, {
     ...rest,
     headers: requestHeaders,
     body: json !== undefined ? JSON.stringify(json) : rest.body,
@@ -71,8 +75,9 @@ export function formatDate(value?: string) {
 
 export function getPrettyUserAgent(userAgent: string) {
   const browser =
-    userAgent.match(/(Chrome|Safari|Firefox|Edge)\/[\d.]+/)?.[0].split("/")[0] ??
-    "Unknown Browser";
+    userAgent
+      .match(/(Chrome|Safari|Firefox|Edge)\/[\d.]+/)?.[0]
+      .split("/")[0] ?? "Unknown Browser";
   const os = userAgent.match(/\((.*?)\)/)?.[1].split(";")[0] ?? "Unknown OS";
   return `${browser} on ${os}`;
 }

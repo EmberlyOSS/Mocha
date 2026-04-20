@@ -1,92 +1,222 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { 
-  CircleDot, 
-  FileText,
-  LayoutDashboard, 
+import {
   Bell,
-  Settings, 
-  UserCircle2,
+  ChevronsUpDown,
+  CircleDot,
+  Coffee,
+  FileText,
   FolderKanban,
-  Loader2
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useUser, useSession } from '@/lib/store';
+  LayoutDashboard,
+  Loader2,
+  LogOut,
+  Settings,
+  UserCircle2,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type * as React from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Sidebar as ShadcnSidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+  useSidebar,
+} from "@/components/ui/sidebar";
+import { useSession, useUser } from "@/lib/store";
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-  { name: 'Issues', href: '/issues', icon: CircleDot },
-  { name: 'Documents', href: '/documents', icon: FileText },
-  { name: 'Portal', href: '/portal', icon: FolderKanban },
-  { name: 'Notifications', href: '/notifications', icon: Bell },
-  { name: 'Profile', href: '/profile', icon: UserCircle2 },
-  { name: 'Settings', href: '/settings', icon: Settings },
+  { name: "Dashboard", href: "/", icon: LayoutDashboard },
+  { name: "Issues", href: "/issues", icon: CircleDot },
+  { name: "Documents", href: "/documents", icon: FileText },
+  { name: "Portal", href: "/portal", icon: FolderKanban },
+  { name: "Notifications", href: "/notifications", icon: Bell },
+  { name: "Profile", href: "/profile", icon: UserCircle2 },
+  { name: "Settings", href: "/settings", icon: Settings },
 ];
 
-export function Sidebar() {
+export function Sidebar({
+  ...props
+}: React.ComponentProps<typeof ShadcnSidebar>) {
   const pathname = usePathname();
   const user = useUser();
   const { loading } = useSession();
+  const { isMobile } = useSidebar();
 
-  // Hide sidebar on auth pages
-  if (pathname.startsWith('/auth')) return null;
+  if (pathname.startsWith("/auth")) return null;
 
   return (
-    <div className="hidden h-full w-64 shrink-0 flex-col border-r border-border bg-card lg:flex">
-      <div className="flex h-16 items-center px-6">
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight">
-          <div className="h-8 w-8 rounded-lg bg-linear-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white">
-            M
-          </div>
-          <span>Mocha</span>
-        </Link>
-      </div>
-      <div className="flex flex-1 flex-col overflow-y-auto px-4 py-4">
-        <nav className="flex-1 space-y-1">
-          {navigation.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={cn(
-                  'group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                  isActive
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                )}
+    <ShadcnSidebar variant="inset" {...props}>
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton
+                  size="lg"
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                >
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground shadow-sm">
+                    <Coffee className="size-4" />
+                  </div>
+                  <div className="grid flex-1 text-left text-sm leading-tight ml-1">
+                    <span className="truncate font-semibold">Mocha Client</span>
+                    <span className="truncate text-xs">Workspace</span>
+                  </div>
+                  <ChevronsUpDown className="ml-auto size-4" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                align="start"
+                side={isMobile ? "bottom" : "right"}
+                sideOffset={4}
               >
-                <item.icon className={cn('h-4 w-4', isActive ? 'text-primary' : 'text-muted-foreground group-hover:text-accent-foreground')} />
-                {item.name}
-              </Link>
-            );
-          })}
-        </nav>
-      </div>
-      <div className="border-t border-border p-4">
-        {loading ? (
-          <div className="flex items-center justify-center py-2">
-            <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-          </div>
-        ) : user ? (
-          <div className="flex items-center gap-3 rounded-lg border border-border/70 bg-background px-3 py-2">
-            {user.avatar ? (
-               <img src={user.avatar} className="h-8 w-8 rounded-full object-cover" alt={user.name} />
-            ) : (
-              <div className="h-8 w-8 rounded-full bg-linear-to-br from-violet-100 to-indigo-100 dark:from-violet-900/40 dark:to-indigo-900/40 flex items-center justify-center text-[10px] font-bold text-primary">
-                {user.name.split(' ').map(n => n[0]).join('')}
+                <DropdownMenuLabel className="text-xs text-muted-foreground">
+                  Workspaces
+                </DropdownMenuLabel>
+                <DropdownMenuItem className="gap-2 p-2">
+                  <div className="flex size-6 items-center justify-center rounded-sm border">
+                    <Coffee className="size-4 shrink-0" />
+                  </div>
+                  Mocha
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
+
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Platform</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {navigation.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <SidebarMenuItem key={item.name}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive}
+                      tooltip={item.name}
+                    >
+                      <Link href={item.href}>
+                        <item.icon />
+                        <span>{item.name}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            {loading ? (
+              <div className="flex items-center justify-center py-4">
+                <Loader2 className="h-5 w-5 animate-spin text-sidebar-foreground" />
               </div>
-            )}
-            <div className="flex flex-col overflow-hidden">
-              <span className="text-sm font-medium truncate">{user.name}</span>
-              <span className="text-xs text-muted-foreground truncate">{user.isAdmin ? 'Admin' : 'Member'}</span>
-            </div>
-          </div>
-        ) : null}
-      </div>
-    </div>
+            ) : user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton
+                    size="lg"
+                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                  >
+                    {user.avatar ? (
+                      <img
+                        src={user.avatar}
+                        className="h-8 w-8 rounded-lg object-cover"
+                        alt={user.name}
+                      />
+                    ) : (
+                      <div className="h-8 w-8 rounded-lg bg-sidebar-accent border border-sidebar-border flex items-center justify-center text-xs font-bold text-sidebar-foreground">
+                        {user.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </div>
+                    )}
+                    <div className="grid flex-1 text-left text-sm leading-tight ml-1">
+                      <span className="truncate font-semibold">
+                        {user.name}
+                      </span>
+                      <span className="truncate text-xs">
+                        {user.isAdmin ? "Administrator" : "Team Member"}
+                      </span>
+                    </div>
+                    <ChevronsUpDown className="ml-auto size-4" />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                  side={isMobile ? "bottom" : "right"}
+                  align="end"
+                  sideOffset={4}
+                >
+                  <DropdownMenuLabel className="p-0 font-normal">
+                    <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                      {user.avatar ? (
+                        <img
+                          src={user.avatar}
+                          className="h-8 w-8 rounded-lg object-cover"
+                          alt={user.name}
+                        />
+                      ) : (
+                        <div className="h-8 w-8 rounded-lg bg-sidebar-accent border border-sidebar-border flex items-center justify-center text-xs font-bold text-sidebar-foreground">
+                          {user.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
+                        </div>
+                      )}
+                      <div className="grid flex-1 text-left text-sm leading-tight">
+                        <span className="truncate font-semibold">
+                          {user.name}
+                        </span>
+                        <span className="truncate text-xs">
+                          {user.email || "user@example.com"}
+                        </span>
+                      </div>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <UserCircle2 className="mr-2 size-4" />
+                    Account
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <LogOut className="mr-2 size-4" />
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : null}
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+      <SidebarRail />
+    </ShadcnSidebar>
   );
 }

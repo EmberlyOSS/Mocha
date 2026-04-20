@@ -1,8 +1,7 @@
-'use client';
+"use client";
 
-import { Store } from '@tanstack/react-store';
-import { useStore } from '@tanstack/react-store';
-import type { User } from '@/lib/types';
+import { Store, useStore } from "@tanstack/react-store";
+import type { User } from "@/lib/types";
 
 interface SessionState {
   user: User | null;

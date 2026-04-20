@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { api } from '@/lib/api';
-import { setUser, useSession } from '@/lib/store';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { api } from "@/lib/api";
+import { setUser, useSession } from "@/lib/store";
 
 type NotificationKey =
-  | 'ticket_created'
-  | 'ticket_status_changed'
-  | 'ticket_assigned'
-  | 'ticket_comments';
+  | "ticket_created"
+  | "ticket_status_changed"
+  | "ticket_assigned"
+  | "ticket_comments";
 
 export default function NotificationSettingsPage() {
   const { user } = useSession();
@@ -20,39 +20,39 @@ export default function NotificationSettingsPage() {
     ticket_assigned: Boolean(user?.ticket_assigned),
     ticket_comments: Boolean(user?.ticket_comments),
   });
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState("");
 
   if (!user) return null;
 
   const items = [
     {
-      key: 'ticket_created' as const,
-      title: 'Ticket creation',
-      description: 'Get emailed when a new ticket is created.',
+      key: "ticket_created" as const,
+      title: "Ticket creation",
+      description: "Get emailed when a new ticket is created.",
     },
     {
-      key: 'ticket_status_changed' as const,
-      title: 'Ticket status changes',
-      description: 'Get emailed when a ticket assigned to you changes state.',
+      key: "ticket_status_changed" as const,
+      title: "Ticket status changes",
+      description: "Get emailed when a ticket assigned to you changes state.",
     },
     {
-      key: 'ticket_assigned' as const,
-      title: 'Assigned tickets',
-      description: 'Get emailed when you are assigned to a ticket.',
+      key: "ticket_assigned" as const,
+      title: "Assigned tickets",
+      description: "Get emailed when you are assigned to a ticket.",
     },
     {
-      key: 'ticket_comments' as const,
-      title: 'Ticket comments',
-      description: 'Get emailed when a comment lands on your ticket.',
+      key: "ticket_comments" as const,
+      title: "Ticket comments",
+      description: "Get emailed when a comment lands on your ticket.",
     },
   ];
 
   const save = async () => {
-    setStatus('Saving...');
+    setStatus("Saving...");
 
     try {
-      await api('/api/v1/auth/profile/notifcations/emails', {
-        method: 'PUT',
+      await api("/api/v1/auth/profile/notifcations/emails", {
+        method: "PUT",
         json: {
           notify_ticket_created: values.ticket_created,
           notify_ticket_assigned: values.ticket_assigned,
@@ -68,10 +68,10 @@ export default function NotificationSettingsPage() {
         ticket_status_changed: values.ticket_status_changed,
         ticket_comments: values.ticket_comments,
       });
-      setStatus('Saved.');
+      setStatus("Saved.");
     } catch (error) {
-      console.error('Failed to save notification settings', error);
-      setStatus('Save failed.');
+      console.error("Failed to save notification settings", error);
+      setStatus("Save failed.");
     }
   };
 
@@ -89,7 +89,9 @@ export default function NotificationSettingsPage() {
             >
               <div>
                 <p className="font-medium">{item.title}</p>
-                <p className="text-sm text-muted-foreground">{item.description}</p>
+                <p className="text-sm text-muted-foreground">
+                  {item.description}
+                </p>
               </div>
               <button
                 type="button"
@@ -102,12 +104,12 @@ export default function NotificationSettingsPage() {
                   }))
                 }
                 className={`relative h-7 w-12 rounded-full transition-colors ${
-                  values[item.key] ? 'bg-primary' : 'bg-muted'
+                  values[item.key] ? "bg-primary" : "bg-muted"
                 }`}
               >
                 <span
                   className={`absolute top-1 h-5 w-5 rounded-full bg-white transition-transform ${
-                    values[item.key] ? 'translate-x-6' : 'translate-x-1'
+                    values[item.key] ? "translate-x-6" : "translate-x-1"
                   }`}
                 />
               </button>

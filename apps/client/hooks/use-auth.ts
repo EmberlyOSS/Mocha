@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { deleteCookie } from 'cookies-next';
-import { useRouter } from 'next/navigation';
-import { api } from '@/lib/api';
-import { resetSession } from '@/lib/store';
+import { deleteCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
+import { api } from "@/lib/api";
+import { resetSession } from "@/lib/store";
 
 export function useLogout() {
   const router = useRouter();
@@ -12,15 +12,15 @@ export function useLogout() {
     try {
       if (userId) {
         await api(`/api/v1/auth/user/${userId}/logout`, {
-          method: 'GET',
+          method: "GET",
         });
       }
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error("Logout failed:", error);
     } finally {
-      deleteCookie('session');
+      deleteCookie("session");
       resetSession();
-      router.replace('/auth/login');
+      router.replace("/auth/login");
       router.refresh();
     }
   };

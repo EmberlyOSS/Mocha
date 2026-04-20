@@ -1,80 +1,93 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { use, useEffect, useMemo, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { api, formatDate } from '@/lib/api';
+import Link from "next/link";
+import { use, useEffect, useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { api, formatDate } from "@/lib/api";
 
 type AdminData = Record<string, unknown>;
 
-const routeDescriptions: Record<string, { title: string; description: string; endpoint?: string }> = {
-  'authentication': {
-    title: 'Authentication',
-    description: 'Legacy admin authentication settings migrated into the new shell.',
+const routeDescriptions: Record<
+  string,
+  { title: string; description: string; endpoint?: string }
+> = {
+  authentication: {
+    title: "Authentication",
+    description:
+      "Legacy admin authentication settings migrated into the new shell.",
   },
-  'clients': {
-    title: 'Clients',
-    description: 'Client directory from the old admin area.',
-    endpoint: '/api/v1/clients/all',
+  clients: {
+    title: "Clients",
+    description: "Client directory from the old admin area.",
+    endpoint: "/api/v1/clients/all",
   },
-  'clients/new': {
-    title: 'Create client',
-    description: 'Dedicated create-client screen still needs endpoint-specific controls.',
+  "clients/new": {
+    title: "Create client",
+    description:
+      "Dedicated create-client screen still needs endpoint-specific controls.",
   },
-  'email-queues': {
-    title: 'Email queues',
-    description: 'Queue overview from the legacy admin app.',
-    endpoint: '/api/v1/email-queues/all',
+  "email-queues": {
+    title: "Email queues",
+    description: "Queue overview from the legacy admin app.",
+    endpoint: "/api/v1/email-queues/all",
   },
-  'email-queues/new': {
-    title: 'Create email queue',
-    description: 'New queue flow has been routed into the new shell.',
+  "email-queues/new": {
+    title: "Create email queue",
+    description: "New queue flow has been routed into the new shell.",
   },
-  'email-queues/oauth': {
-    title: 'Email queue OAuth',
-    description: 'OAuth callback and setup page for email queues.',
+  "email-queues/oauth": {
+    title: "Email queue OAuth",
+    description: "OAuth callback and setup page for email queues.",
   },
-  'logs': {
-    title: 'Logs',
-    description: 'Operational log viewer.',
-    endpoint: '/api/v1/data/logs',
+  logs: {
+    title: "Logs",
+    description: "Operational log viewer.",
+    endpoint: "/api/v1/data/logs",
   },
-  'roles': {
-    title: 'Roles',
-    description: 'Role configuration surface.',
-    endpoint: '/api/v1/roles/all',
+  roles: {
+    title: "Roles",
+    description: "Role configuration surface.",
+    endpoint: "/api/v1/roles/all",
   },
-  'roles/new': {
-    title: 'Create role',
-    description: 'Route migrated; role creation controls still need a dedicated editor.',
+  "roles/new": {
+    title: "Create role",
+    description:
+      "Route migrated; role creation controls still need a dedicated editor.",
   },
-  'smtp': {
-    title: 'SMTP',
-    description: 'SMTP configuration and provider setup.',
+  smtp: {
+    title: "SMTP",
+    description: "SMTP configuration and provider setup.",
   },
-  'smtp/oauth': {
-    title: 'SMTP OAuth',
-    description: 'SMTP provider OAuth callback route.',
+  "smtp/oauth": {
+    title: "SMTP OAuth",
+    description: "SMTP provider OAuth callback route.",
   },
-  'tickets': {
-    title: 'Admin tickets',
-    description: 'Administrative ticket overview.',
-    endpoint: '/api/v1/tickets/all/admin',
+  tickets: {
+    title: "Admin tickets",
+    description: "Administrative ticket overview.",
+    endpoint: "/api/v1/tickets/all/admin",
   },
-  'users/internal': {
-    title: 'Internal users',
-    description: 'Internal user management.',
-    endpoint: '/api/v1/users/all',
+  "users/internal": {
+    title: "Internal users",
+    description: "Internal user management.",
+    endpoint: "/api/v1/users/all",
   },
-  'users/internal/new': {
-    title: 'Create internal user',
-    description: 'Route migrated; account creation form still needs a dedicated editor.',
+  "users/internal/new": {
+    title: "Create internal user",
+    description:
+      "Route migrated; account creation form still needs a dedicated editor.",
   },
-  'webhooks': {
-    title: 'Webhooks',
-    description: 'Webhook configuration list.',
-    endpoint: '/api/v1/webhooks/all',
+  webhooks: {
+    title: "Webhooks",
+    description: "Webhook configuration list.",
+    endpoint: "/api/v1/webhooks/all",
   },
 };
 
@@ -85,28 +98,29 @@ export default function AdminCatchAllPage({
 }) {
   const { slug } = use(params);
   const [data, setData] = useState<AdminData | null>(null);
-  const [status, setStatus] = useState('Loading route...');
+  const [status, setStatus] = useState("Loading route...");
 
-  const routeKey = useMemo(() => slug.join('/'), [slug]);
+  const routeKey = useMemo(() => slug.join("/"), [slug]);
   const config = useMemo(() => {
     if (routeDescriptions[routeKey]) {
       return routeDescriptions[routeKey];
     }
-    if (slug[0] === 'roles' && slug[1] && slug[1] !== 'new') {
+    if (slug[0] === "roles" && slug[1] && slug[1] !== "new") {
       return {
         title: `Role ${slug[1]}`,
-        description: 'Dynamic role detail route migrated into the new shell.',
+        description: "Dynamic role detail route migrated into the new shell.",
       };
     }
-    if (slug[0] === 'smtp' && slug[1] === 'templates' && slug[2]) {
+    if (slug[0] === "smtp" && slug[1] === "templates" && slug[2]) {
       return {
         title: `SMTP template ${slug[2]}`,
-        description: 'Dynamic SMTP template route migrated into the new shell.',
+        description: "Dynamic SMTP template route migrated into the new shell.",
       };
     }
     return {
       title: `Admin / ${routeKey}`,
-      description: 'Route path exists in the new shell, but no dedicated data loader has been attached yet.',
+      description:
+        "Route path exists in the new shell, but no dedicated data loader has been attached yet.",
     };
   }, [routeKey, slug]);
 
@@ -114,18 +128,20 @@ export default function AdminCatchAllPage({
     const load = async () => {
       if (!config.endpoint) {
         setData(null);
-        setStatus('Route migrated.');
+        setStatus("Route migrated.");
         return;
       }
 
-      setStatus('Loading data...');
+      setStatus("Loading data...");
 
       try {
         const response = await api<AdminData>(config.endpoint);
         setData(response);
-        setStatus('Route migrated.');
+        setStatus("Route migrated.");
       } catch (error) {
-        setStatus(error instanceof Error ? error.message : 'Failed to load route data.');
+        setStatus(
+          error instanceof Error ? error.message : "Failed to load route data.",
+        );
       }
     };
 
@@ -160,11 +176,17 @@ export default function AdminCatchAllPage({
   );
 }
 
-function AdminDataView({ routeKey, data }: { routeKey: string; data: AdminData }) {
-  if (routeKey === 'logs') {
-    const rawLogs = typeof data.logs === 'string' ? data.logs : '';
+function AdminDataView({
+  routeKey,
+  data,
+}: {
+  routeKey: string;
+  data: AdminData;
+}) {
+  if (routeKey === "logs") {
+    const rawLogs = typeof data.logs === "string" ? data.logs : "";
     const items = rawLogs
-      .split('\n')
+      .split("\n")
       .filter(Boolean)
       .map((line) => {
         try {
@@ -179,9 +201,16 @@ function AdminDataView({ routeKey, data }: { routeKey: string; data: AdminData }
     return (
       <div className="space-y-3">
         {items.map((item, index) => (
-          <div key={`${item?.time}-${index}`} className="rounded-2xl border border-border bg-background px-4 py-3">
-            <div className="text-xs text-muted-foreground">{formatDate(item?.time)}</div>
-            <div className="mt-1 text-sm font-medium">{item?.msg ?? 'Unknown log entry'}</div>
+          <div
+            key={`${item?.time}-${index}`}
+            className="rounded-2xl border border-border bg-background px-4 py-3"
+          >
+            <div className="text-xs text-muted-foreground">
+              {formatDate(item?.time)}
+            </div>
+            <div className="mt-1 text-sm font-medium">
+              {item?.msg ?? "Unknown log entry"}
+            </div>
           </div>
         ))}
       </div>
@@ -210,10 +239,23 @@ function AdminDataView({ routeKey, data }: { routeKey: string; data: AdminData }
       {candidates.slice(0, 25).map((item, index) => {
         const record = item as Record<string, unknown>;
         return (
-          <div key={String(record.id ?? index)} className="rounded-2xl border border-border bg-background px-4 py-3">
-            <div className="font-medium">{String(record.name ?? record.title ?? record.id ?? `Row ${index + 1}`)}</div>
+          <div
+            key={String(record.id ?? index)}
+            className="rounded-2xl border border-border bg-background px-4 py-3"
+          >
+            <div className="font-medium">
+              {String(
+                record.name ?? record.title ?? record.id ?? `Row ${index + 1}`,
+              )}
+            </div>
             <div className="mt-1 text-sm text-muted-foreground">
-              {String(record.email ?? record.url ?? record.priority ?? record.description ?? 'No secondary field')}
+              {String(
+                record.email ??
+                  record.url ??
+                  record.priority ??
+                  record.description ??
+                  "No secondary field",
+              )}
             </div>
           </div>
         );

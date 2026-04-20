@@ -1,20 +1,23 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { api } from '@/lib/api';
-import type { Ticket } from '@/lib/types';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { api } from "@/lib/api";
+import type { Ticket } from "@/lib/types";
 
 function useQueueTickets(name: string) {
   return useQuery({
-    queryKey: ['queue', name],
+    queryKey: ["queue", name],
     enabled: Boolean(name),
     queryFn: () =>
-      api<{ tickets: Ticket[] }>(`/api/v1/ticket/emailQueue?name=${encodeURIComponent(name)}`, {
-        auth: false,
-      }),
+      api<{ tickets: Ticket[] }>(
+        `/api/v1/ticket/emailQueue?name=${encodeURIComponent(name)}`,
+        {
+          auth: false,
+        },
+      ),
   });
 }
 
@@ -43,10 +46,16 @@ export default function QueuePage() {
                   href={`/issue/${ticket.id}`}
                   className="grid gap-3 px-6 py-4 transition-colors hover:bg-accent lg:grid-cols-[100px_160px_minmax(0,1fr)_140px]"
                 >
-                  <div className="text-sm text-muted-foreground">#{ticket.Number ?? '-'}</div>
-                  <div className="text-sm text-muted-foreground">{ticket.client?.name ?? 'No client'}</div>
+                  <div className="text-sm text-muted-foreground">
+                    #{ticket.Number ?? "-"}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    {ticket.client?.name ?? "No client"}
+                  </div>
                   <div className="truncate font-medium">{ticket.title}</div>
-                  <div className="text-sm text-muted-foreground">{ticket.priority ?? 'Low'}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {ticket.priority ?? "Low"}
+                  </div>
                 </Link>
               ))}
             </div>

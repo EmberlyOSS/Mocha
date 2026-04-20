@@ -1,10 +1,16 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { use, useMemo } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAllTickets } from '@/hooks/use-tickets';
+import Link from "next/link";
+import { use, useMemo } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { useAllTickets } from "@/hooks/use-tickets";
 
 export default function FilteredIssuesPage({
   params,
@@ -16,10 +22,10 @@ export default function FilteredIssuesPage({
 
   const tickets = useMemo(() => {
     const all = data?.tickets ?? [];
-    if (status === 'open') {
+    if (status === "open") {
       return all.filter((ticket) => !ticket.isComplete);
     }
-    if (status === 'closed') {
+    if (status === "closed") {
       return all.filter((ticket) => Boolean(ticket.isComplete));
     }
     return [];
@@ -29,7 +35,9 @@ export default function FilteredIssuesPage({
       <Card>
         <CardHeader className="flex flex-row items-center justify-between gap-4">
           <div>
-            <CardTitle>{status === 'closed' ? 'Closed issues' : 'Open issues'}</CardTitle>
+            <CardTitle>
+              {status === "closed" ? "Closed issues" : "Open issues"}
+            </CardTitle>
             <CardDescription>
               Direct replacement for the old filtered issue pages.
             </CardDescription>
@@ -58,14 +66,14 @@ export default function FilteredIssuesPage({
                   <div className="min-w-0">
                     <p className="truncate font-medium">{ticket.title}</p>
                     <p className="mt-1 text-xs text-muted-foreground">
-                      {ticket.id} · {ticket.assignedTo?.name ?? 'Unassigned'}
+                      {ticket.id} · {ticket.assignedTo?.name ?? "Unassigned"}
                     </p>
                   </div>
                   <div className="text-sm text-muted-foreground">
-                    {ticket.priority ?? 'Normal'}
+                    {ticket.priority ?? "Normal"}
                   </div>
                   <div className="text-sm text-muted-foreground">
-                    {new Date(ticket.createdAt).toLocaleDateString('en-GB')}
+                    {new Date(ticket.createdAt).toLocaleDateString("en-GB")}
                   </div>
                 </Link>
               ))}

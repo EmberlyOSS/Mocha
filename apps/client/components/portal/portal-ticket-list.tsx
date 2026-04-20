@@ -1,14 +1,15 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import type { Ticket } from '@/lib/types';
+import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { Ticket } from "@/lib/types";
 
 function priorityTone(priority?: string) {
   const value = priority?.toLowerCase();
-  if (value === 'high') return 'bg-red-50 text-red-700';
-  if (value === 'normal' || value === 'medium') return 'bg-emerald-50 text-emerald-700';
-  return 'bg-blue-50 text-blue-700';
+  if (value === "high") return "bg-red-50 text-red-700";
+  if (value === "normal" || value === "medium")
+    return "bg-emerald-50 text-emerald-700";
+  return "bg-blue-50 text-blue-700";
 }
 
 export function PortalTicketList({
@@ -44,19 +45,22 @@ export function PortalTicketList({
               <div className="min-w-0">
                 <p className="truncate font-medium">{ticket.title}</p>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  #{ticket.Number ?? ticket.id} · {ticket.assignedTo?.name ?? 'Unassigned'}
+                  #{ticket.Number ?? ticket.id} ·{" "}
+                  {ticket.assignedTo?.name ?? "Unassigned"}
                 </p>
               </div>
               <div>
-                <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${priorityTone(ticket.priority)}`}>
-                  {ticket.priority ?? 'Low'}
+                <span
+                  className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${priorityTone(ticket.priority)}`}
+                >
+                  {ticket.priority ?? "Low"}
                 </span>
               </div>
               <div className="text-sm text-muted-foreground">
-                {ticket.isComplete ? 'Closed' : 'Open'}
+                {ticket.isComplete ? "Closed" : "Open"}
               </div>
               <div className="text-sm text-muted-foreground">
-                {new Date(ticket.createdAt).toLocaleDateString('en-GB')}
+                {new Date(ticket.createdAt).toLocaleDateString("en-GB")}
               </div>
             </Link>
           ))}
