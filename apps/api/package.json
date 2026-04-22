@@ -6,7 +6,6 @@
   "author": "Tyler H <codemeapixel>",
   "license": "AGPL-3.0-only",
   "scripts": {
-    "postinstall": "prisma generate",
     "generate": "prisma generate",
     "db:push": "prisma db push --accept-data-loss",
     "db:seed": "prisma db seed",

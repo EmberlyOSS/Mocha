@@ -12,15 +12,15 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "next": "^14.2.15",
+    "next": "^16.2.4",
     "nextra": "^3.0.15",
     "nextra-theme-docs": "^3.0.15",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
     "react-spinners": "^0.13.8"
   },
   "devDependencies": {
-    "@types/react": "18.2.38",
-    "@types/react-dom": "^18"
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3"
   }
 }
