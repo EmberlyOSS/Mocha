@@ -373,6 +373,45 @@ export function configRoutes(fastify: FastifyInstance) {
     }
   );
 
+  // Send a test email
+  fastify.post(
+    "/api/v1/config/email/test",
+
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { to }: any = request.body;
+
+      if (!to) {
+        return reply.status(400).send({ success: false, message: "Recipient address required." });
+      }
+
+      const emailConfig = await prisma.email.findFirst();
+
+      if (!emailConfig) {
+        return reply.status(400).send({ success: false, message: "No email provider configured." });
+      }
+
+      try {
+        const transport = await createTransportProvider();
+
+        await transport.sendMail({
+          from: emailConfig.reply,
+          to,
+          subject: "Mocha — test email",
+          text: "This is a test email from your Mocha instance. If you received this, your email provider is configured correctly.",
+          html: `<!DOCTYPE html><html><body style="background:#fff;font-family:sans-serif;padding:24px">
+            <h2 style="color:#09090b">Test email</h2>
+            <p style="color:#71717a">This is a test email from your Mocha instance.</p>
+            <p style="color:#71717a">If you received this, your email provider is configured correctly.</p>
+          </body></html>`,
+        });
+
+        reply.send({ success: true, message: "Test email sent." });
+      } catch (error: any) {
+        reply.status(500).send({ success: false, message: error?.message ?? "Failed to send test email." });
+      }
+    }
+  );
+
   // Disable/Enable Email
   fastify.delete(
     "/api/v1/config/email",

@@ -3,13 +3,19 @@
 import {
   PiCaretUpDown,
   PiBellDuotone,
+  PiEnvelopeDuotone,
   PiFilesDuotone,
   PiGearSixDuotone,
   PiGlobeDuotone,
   PiHouseDuotone,
+  PiLinkDuotone,
+  PiListBulletsDuotone,
+  PiShieldCheckDuotone,
   PiSignOutDuotone,
   PiUserCircleDuotone,
   PiUserDuotone,
+  PiUsersDuotone,
+  PiWarningDuotone,
 } from "react-icons/pi";
 import { GoIssueOpened } from "react-icons/go";
 import { Plus } from "lucide-react";
@@ -58,6 +64,15 @@ const navigation = [
   { name: "Notifications", href: "/notifications", icon: PiBellDuotone },
   { name: "Profile", href: "/profile", icon: PiUserCircleDuotone },
   { name: "Settings", href: "/settings", icon: PiGearSixDuotone },
+];
+
+const adminNavigation = [
+  { name: "Users", href: "/admin/users/internal", icon: PiUsersDuotone },
+  { name: "Roles", href: "/admin/roles", icon: PiShieldCheckDuotone },
+  { name: "SMTP", href: "/admin/smtp", icon: PiEnvelopeDuotone },
+  { name: "Email Queues", href: "/admin/email-queues", icon: PiListBulletsDuotone },
+  { name: "Webhooks", href: "/admin/webhooks", icon: PiLinkDuotone },
+  { name: "Logs", href: "/admin/logs", icon: PiWarningDuotone },
 ];
 
 export function Sidebar({
@@ -176,6 +191,47 @@ export function Sidebar({
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
+
+        {/* ─── Admin ─── */}
+        {user?.isAdmin && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Admin</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {adminNavigation.map((item) => {
+                  const isActive = pathname.startsWith(item.href);
+                  return (
+                    <SidebarMenuItem key={item.name}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <SidebarMenuButton
+                            asChild
+                            isActive={isActive}
+                            tooltip={item.name}
+                          >
+                            <Link href={item.href}>
+                              <item.icon
+                                className={
+                                  isActive
+                                    ? "text-violet-400"
+                                    : "text-muted-foreground"
+                                }
+                              />
+                              <span>{item.name}</span>
+                            </Link>
+                          </SidebarMenuButton>
+                        </TooltipTrigger>
+                        <TooltipContent side="right" className="font-medium">
+                          {item.name}
+                        </TooltipContent>
+                      </Tooltip>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
 
         {/* ─── Footer / User menu ─── */}
         <SidebarFooter>
