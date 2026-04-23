@@ -31,8 +31,6 @@ Once complete, open `http://your-server-ip:3000` in your browser to finish the D
 3. Under **Source**, choose **Custom** and paste the following compose definition:
 
 ```yaml
-version: "3.1"
-
 services:
   mocha_postgres:
     container_name: mocha_postgres
@@ -58,6 +56,7 @@ services:
       DB_USERNAME: "mocha"
       DB_PASSWORD: ${DB_PASSWORD}
       DB_HOST: "mocha_postgres"
+      DATABASE_URL: "postgresql://mocha:${DB_PASSWORD}@mocha_postgres/mocha"
       SECRET: ${SECRET}
 
 volumes:
@@ -72,6 +71,8 @@ In the **Environment** tab, add:
 |---|---|
 | `DB_PASSWORD` | A strong random password |
 | `SECRET` | A long random string (used to sign JWTs) |
+
+That's all you need to set. `DATABASE_URL` is constructed automatically from `DB_PASSWORD` by the compose file — Dokploy passes your env vars to `docker compose` which substitutes them at deploy time. PostgreSQL is also created automatically as part of the same stack; no external database is needed.
 
 Use a password generator — never commit real credentials to source control.
 
