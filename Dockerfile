@@ -24,8 +24,19 @@ COPY ecosystem.config.js ./ecosystem.config.js
 # Build API
 RUN cd apps/api && bunx prisma generate && bun run build
 
-# Build client (Next.js standalone output)
-RUN cd apps/client && NEXT_OUTPUT=standalone bun run build
+# Build client (output: standalone is hardcoded in next.config.ts, safe for dev too)
+RUN cd apps/client && bun run build
+
+# ── API production deps ───────────────────────────────────────────────────────
+# Install outside the workspace root so bun doesn't hoist to /app/node_modules
+WORKDIR /api-prod
+COPY apps/api/package.json ./
+RUN bun install --production
+# Overlay the Prisma-generated client from the workspace build
+RUN cp -r /app/node_modules/.prisma ./node_modules/ && \
+    cp -r /app/node_modules/@prisma/client/. ./node_modules/@prisma/client/
+
+WORKDIR /app
 
 # ── Runner ────────────────────────────────────────────────────────────────────
 FROM node:22-slim AS runner
@@ -35,7 +46,7 @@ RUN npm install -g pm2
 
 # API
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
-COPY --from=builder /app/apps/api/node_modules ./apps/api/node_modules
+COPY --from=builder /api-prod/node_modules ./apps/api/node_modules
 COPY --from=builder /app/apps/api/package.json ./apps/api/package.json
 
 # Client (Next.js standalone)

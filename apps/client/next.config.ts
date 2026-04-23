@@ -7,7 +7,7 @@ const allowedDevOrigins = process.env.ALLOWED_DEV_ORIGINS
   : [];
 
 const nextConfig: NextConfig = {
-  output: process.env.NEXT_OUTPUT as "standalone" | undefined,
+  output: "standalone",
   allowedDevOrigins,
   async rewrites() {
     return [
