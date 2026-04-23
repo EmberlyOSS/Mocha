@@ -10,7 +10,7 @@ module.exports = {
       watch: false,
       env: {
         NODE_ENV: "production",
-        PORT: 3000,
+        PORT: process.env.PORT || 3000,
       },
     },
     {
@@ -24,9 +24,11 @@ module.exports = {
       restart_delay: 3000,
       env: {
         NODE_ENV: "production",
+        API_PORT: process.env.API_PORT || 5003,
         DB_USERNAME: process.env.DB_USERNAME,
         DB_PASSWORD: process.env.DB_PASSWORD,
         DB_HOST: process.env.DB_HOST,
+        DATABASE_URL: process.env.DATABASE_URL,
         SECRET: process.env.SECRET,
       },
     },
