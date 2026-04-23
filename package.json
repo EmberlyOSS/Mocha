@@ -8,6 +8,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "mintlify": "latest",
     "prettier": "^2.5.1",
     "turbo": "^2.0.3"
   },
