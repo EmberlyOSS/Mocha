@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { FaGithub } from "react-icons/fa";
 import {
   ArrowRight,
   BookOpenText,
   CheckCircle2,
-  Github,
   Loader2,
   MessagesSquare,
   ShieldCheck,
@@ -24,7 +24,7 @@ type ResourceCard = {
   title: string;
   description: string;
   href: string;
-  icon: typeof Github;
+  icon: typeof FaGithub;
   external?: boolean;
   tone: string;
 };
@@ -34,7 +34,7 @@ const resources: ResourceCard[] = [
     title: "Source code",
     description: "See how Mocha is wired, extended, and deployed.",
     href: "https://github.com/EmberlyOSS/Mocha",
-    icon: Github,
+    icon: FaGithub,
     external: true,
     tone: "from-sky-500/20 via-sky-500/10 to-transparent",
   },
@@ -286,7 +286,9 @@ export default function OnboardingPage() {
                   <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/10 bg-black/25 text-[11px] font-semibold text-violet-200">
                     0{index + 1}
                   </div>
-                  <p className="text-sm leading-relaxed text-zinc-400">{item}</p>
+                  <p className="text-sm leading-relaxed text-zinc-400">
+                    {item}
+                  </p>
                 </div>
               ))}
             </div>
