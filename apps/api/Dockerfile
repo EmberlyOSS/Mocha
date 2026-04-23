@@ -9,22 +9,21 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install dependencies (layer-cached separately from source)
-COPY package.json bun.lock* turbo.json ./
-COPY packages/ ./packages/
-COPY apps/api/package.json ./apps/api/
-RUN bun install --frozen-lockfile
+COPY package.json ./
+RUN bun install
 
 # Copy source and build
-COPY apps/api ./apps/api
-RUN cd apps/api && bunx prisma generate && bun run build
+COPY . .
+RUN bunx prisma generate && bun run build
 
 # ── Runner ────────────────────────────────────────────────────────────────────
-FROM base AS runner
+FROM node:22-slim AS runner
 WORKDIR /app
 
-COPY --from=builder /app/apps/api/dist ./dist
-COPY --from=builder /app/apps/api/node_modules ./node_modules
-COPY --from=builder /app/apps/api/package.json ./package.json
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/prisma ./prisma
 
 EXPOSE 5003
 

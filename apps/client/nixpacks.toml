@@ -6,7 +6,7 @@ includeNode = false
 cmds = ["bun install"]
 
 [phases.build]
-cmds = ["bunx prisma generate", "bun run build"]
+cmds = ["bun run build"]
 
 [start]
-cmd = "node dist/main.js"
+cmd = "bun start"
