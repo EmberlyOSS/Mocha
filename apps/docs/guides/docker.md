@@ -30,8 +30,8 @@ services:
     container_name: mocha
     image: emberlyoss/mocha:latest
     ports:
-      - 3000:3000
-      - 5003:5003
+      - "${PORT:-3000}:${PORT:-3000}"
+      - "${API_PORT:-5003}:${API_PORT:-5003}"
     restart: always
     depends_on:
       - mocha_postgres
@@ -39,7 +39,10 @@ services:
       DB_USERNAME: "mocha"
       DB_PASSWORD: ${DB_PASSWORD}
       DB_HOST: "mocha_postgres"
+      DATABASE_URL: "postgresql://mocha:${DB_PASSWORD}@mocha_postgres/mocha"
       SECRET: ${SECRET}
+      PORT: ${PORT:-3000}
+      API_PORT: ${API_PORT:-5003}
 
 volumes:
   pgdata:
@@ -50,6 +53,9 @@ Create a `.env` file alongside it with your secrets:
 ```env
 DB_PASSWORD=a-strong-random-password
 SECRET=a-very-long-random-string
+# Optional: override default ports
+# PORT=3000
+# API_PORT=5003
 ```
 
 <Warning>
@@ -77,14 +83,14 @@ Password: 1234
 
 ## Environment variables
 
-| Variable | Description |
-|---|---|
-| `DB_USERNAME` | PostgreSQL username |
-| `DB_PASSWORD` | PostgreSQL password |
-| `DB_HOST` | PostgreSQL host (service name when using Compose) |
-| `SECRET` | JWT signing secret — use a long random string |
-| `PORT` | Client port (default `3000`) |
-| `API_PORT` | API port (default `5003`) |
+| Variable | Description | Default |
+|---|---|---|
+| `DB_PASSWORD` | PostgreSQL password | — |
+| `SECRET` | JWT signing secret — use a long random string | — |
+| `PORT` | Client (Next.js) port | `3000` |
+| `API_PORT` | API (Fastify) port | `5003` |
+| `DB_USERNAME` | PostgreSQL username | `mocha` |
+| `DB_HOST` | PostgreSQL host | `mocha_postgres` |
 
 ## Nightly builds
 

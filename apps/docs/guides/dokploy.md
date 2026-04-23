@@ -47,8 +47,8 @@ services:
     container_name: mocha
     image: emberlyoss/mocha:latest
     ports:
-      - 3000:3000
-      - 5003:5003
+      - "${PORT:-3000}:${PORT:-3000}"
+      - "${API_PORT:-5003}:${API_PORT:-5003}"
     restart: always
     depends_on:
       - mocha_postgres
@@ -58,6 +58,8 @@ services:
       DB_HOST: "mocha_postgres"
       DATABASE_URL: "postgresql://mocha:${DB_PASSWORD}@mocha_postgres/mocha"
       SECRET: ${SECRET}
+      PORT: ${PORT:-3000}
+      API_PORT: ${API_PORT:-5003}
 
 volumes:
   pgdata:
@@ -71,6 +73,8 @@ In the **Environment** tab, add:
 |---|---|
 | `DB_PASSWORD` | A strong random password |
 | `SECRET` | A long random string (used to sign JWTs) |
+| `PORT` | Client port (optional, default `3000`) |
+| `API_PORT` | API port (optional, default `5003`) |
 
 That's all you need to set. `DATABASE_URL` is constructed automatically from `DB_PASSWORD` by the compose file — Dokploy passes your env vars to `docker compose` which substitutes them at deploy time. PostgreSQL is also created automatically as part of the same stack; no external database is needed.
 

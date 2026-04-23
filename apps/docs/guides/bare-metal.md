@@ -83,6 +83,9 @@ DB_PASSWORD="a-strong-password"
 DB_HOST="localhost:5432"
 DATABASE_URL="postgresql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}/mocha"
 SECRET="a-very-long-random-secret"
+# Optional: override default ports
+# PORT=3000
+# API_PORT=5003
 ```
 
 Use `openssl rand -hex 32` to generate a strong secret.
@@ -110,7 +113,7 @@ bunx prisma generate
 
 ```bash
 cd /opt/mocha
-NEXT_OUTPUT=standalone bun run build
+bun run build
 ```
 
 ## 6. Start with PM2
@@ -201,7 +204,7 @@ Certbot will automatically configure HTTPS and schedule auto-renewal.
 
 <Note>
   After enabling SSL, make sure `NEXT_PUBLIC_API_URL` in `apps/client/.env` uses `https://`.
-  Rebuild (`NEXT_OUTPUT=standalone bun run build`) and restart PM2 (`pm2 restart all`) for the change to take effect.
+  Rebuild (`bun run build`) and restart PM2 (`pm2 restart all`) for the change to take effect.
 </Note>
 
 ## Default credentials
@@ -222,6 +225,6 @@ cd /opt/mocha
 git pull
 bun install --frozen-lockfile
 cd apps/api && bunx prisma migrate deploy && bunx prisma generate && cd ../..
-NEXT_OUTPUT=standalone bun run build
+bun run build
 pm2 restart all
 ```
