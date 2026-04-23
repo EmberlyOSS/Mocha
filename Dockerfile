@@ -27,7 +27,7 @@ RUN cd apps/api && bunx prisma generate && bun run build
 RUN cd apps/client && NEXT_OUTPUT=standalone bun run build
 
 # ── Runner ────────────────────────────────────────────────────────────────────
-FROM base AS runner
+FROM node:22-slim AS runner
 WORKDIR /app
 
 RUN npm install -g pm2
