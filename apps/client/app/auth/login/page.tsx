@@ -52,8 +52,8 @@ export default function LoginPage() {
           { auth: false },
         );
         if (data.success && data.url) setOidcUrl(data.url);
-      } catch (e) {
-        console.error("Failed to load auth config", e);
+      } catch {
+        // OIDC is optional — silently ignore if not configured
       }
     };
     void loadOidcUrl();
@@ -93,8 +93,7 @@ export default function LoginPage() {
       }
       router.replace(result.user.firstLogin ? "/onboarding" : "/");
       router.refresh();
-    } catch (loginError) {
-      console.error("Login failed", loginError);
+    } catch {
       setError("Login failed. Check your credentials and try again.");
     } finally {
       setSubmitting(false);

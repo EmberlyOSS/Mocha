@@ -1,3 +1,9 @@
+---
+title: Deploy with Dokploy
+description: Deploy Mocha on any VPS using Dokploy.
+icon: cloud
+---
+
 # Deploy with Dokploy
 
 [Dokploy](https://dokploy.com) is a self-hosted PaaS that makes deploying Docker Compose apps on any VPS simple. This guide covers deploying Mocha on a fresh server using Dokploy.

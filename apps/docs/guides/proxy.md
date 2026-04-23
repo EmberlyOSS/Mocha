@@ -1,3 +1,9 @@
+---
+title: Reverse Proxy
+description: Run Mocha behind nginx or another reverse proxy.
+icon: server
+---
+
 ## Mocha behind a reverse proxy
 
 Sometimes, individuals & organisations like to put applications behind a reverse proxy, the main reason for this is to allow applications to be accessed on specific domains.

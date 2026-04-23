@@ -1,3 +1,9 @@
+---
+title: Easy Installer
+description: Quickly install Mocha using the automated installer script.
+icon: wand-magic-sparkles
+---
+
 # Easy Installer
 
 Welcome to the Easy Installer page! This tool is designed to simplify your setup process.

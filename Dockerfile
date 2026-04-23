@@ -1,43 +1,49 @@
-FROM node:lts AS builder
-
-# Set the working directory inside the container
+FROM oven/bun:1 AS base
 WORKDIR /app
 
+# ── Builder ───────────────────────────────────────────────────────────────────
+FROM base AS builder
+
 RUN apt-get update && \
-    apt-get install -y build-essential python3
+    apt-get install -y build-essential python3 && \
+    rm -rf /var/lib/apt/lists/*
 
-# Copy the package.json and package-lock.json files for both apps
-COPY apps/api/package*.json ./apps/api/
-COPY apps/client/package*.json ./apps/client/
-COPY ./ecosystem.config.js ./ecosystem.config.js
+# Install dependencies (layer-cached separately from source)
+COPY package.json bun.lock* turbo.json ./
+COPY packages/ ./packages/
+COPY apps/api/package.json ./apps/api/
+COPY apps/client/package.json ./apps/client/
+RUN bun install --frozen-lockfile
 
-RUN npm i -g prisma
-RUN npm i -g typescript@latest -g --force 
-
-# Copy the source code for both apps
+# Copy source
 COPY apps/api ./apps/api
 COPY apps/client ./apps/client
+COPY ecosystem.config.js ./ecosystem.config.js
 
-RUN cd apps/api && npm install --production
-RUN cd apps/api && npm i --save-dev @types/node && npm run build
+# Build API
+RUN cd apps/api && bunx prisma generate && bun run build
 
-RUN cd apps/client && yarn install --production --ignore-scripts --prefer-offline --network-timeout 1000000
-RUN cd apps/client && yarn add --dev typescript @types/node --network-timeout 1000000
-RUN cd apps/client && yarn build
+# Build client (Next.js standalone output)
+RUN cd apps/client && NEXT_OUTPUT=standalone bun run build
 
-FROM node:lts AS runner
+# ── Runner ────────────────────────────────────────────────────────────────────
+FROM base AS runner
+WORKDIR /app
 
-COPY --from=builder /app/apps/api/ ./apps/api/
-COPY --from=builder /app/apps/client/.next/standalone ./apps/client
-COPY --from=builder /app/apps/client/.next/static ./apps/client/.next/static
-COPY --from=builder /app/apps/client/public ./apps/client/public
-COPY --from=builder /app/ecosystem.config.js ./ecosystem.config.js
-
-# Expose the ports for both apps
-EXPOSE 3000 5003
-
-# Install PM2 globally
 RUN npm install -g pm2
 
-# Start both apps using PM2
+# API
+COPY --from=builder /app/apps/api/dist ./apps/api/dist
+COPY --from=builder /app/apps/api/node_modules ./apps/api/node_modules
+COPY --from=builder /app/apps/api/package.json ./apps/api/package.json
+
+# Client (Next.js standalone)
+COPY --from=builder /app/apps/client/.next/standalone ./apps/client/
+COPY --from=builder /app/apps/client/.next/static ./apps/client/.next/static
+COPY --from=builder /app/apps/client/public ./apps/client/public
+
+COPY --from=builder /app/ecosystem.config.js ./ecosystem.config.js
+
+EXPOSE 3000 5003
+
 CMD ["pm2-runtime", "ecosystem.config.js"]

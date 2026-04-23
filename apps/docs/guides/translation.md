@@ -1,3 +1,9 @@
+---
+title: Adding a Translation
+description: Add a new language to the Mocha client.
+icon: language
+---
+
 # Adding a New Language to the Project
 
 This guide will walk you through the steps required to add a new language to the project.

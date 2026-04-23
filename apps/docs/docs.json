@@ -1,0 +1,97 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Mocha",
+  "fonts": {
+    "heading": {
+      "family": "Inter"
+    },
+    "body": {
+      "family": "Inter"
+    }
+  },
+  "favicon": "/favicon.ico",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "introduction",
+              "guides/development"
+            ]
+          },
+          {
+            "group": "Self Hosting",
+            "pages": [
+              "guides/docker",
+              "guides/bare-metal",
+              "guides/dokploy",
+              "guides/installer",
+              "guides/proxy"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": [
+              "guides/oidc",
+              "guides/translation"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "GitHub",
+          "href": "https://github.com/EmberlyOSS/Mocha",
+          "icon": "github"
+        },
+        {
+          "anchor": "Community",
+          "href": "https://discord.gg/k2QAfkwDwK",
+          "icon": "discord"
+        },
+        {
+          "anchor": "Twitter",
+          "href": "https://twitter.com/TryEmberly",
+          "icon": "twitter"
+        },
+        {
+          "anchor": "Dashboard",
+          "href": "https://support.embrly.ca",
+          "type": "button"
+        }
+      ]
+    }
+  },
+  "logo": {
+    "light": "/logo/wordmark-light.svg",
+    "dark": "/logo/wordmark-dark.svg"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "https://discord.gg/k2QAfkwDwK"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://support.embrly.ca"
+    }
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/TryEmberly",
+      "github": "https://github.com/EmberlyOSS/Mocha"
+    }
+  },
+  "contextual": {
+    "options": ["copy", "view", "chatgpt", "claude", "perplexity"]
+  }
+}

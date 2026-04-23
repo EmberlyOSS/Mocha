@@ -1,5 +1,3 @@
-version: "3.1"
-
 services:
   mocha_postgres:
     container_name: mocha_postgres
@@ -9,7 +7,7 @@ services:
       - pgdata_live:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: mocha
-      POSTGRES_PASSWORD: 12345
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: mocha
 
   mocha:
@@ -18,18 +16,18 @@ services:
     ports:
       - 1000:3000
       - 1001:5003
-# If running via Docker on a hypervisor, enable DNS.
-#    dns:
-#      - 1.1.1.1
-#      - 8.8.8.8
+    # If running via Docker on a hypervisor, enable DNS:
+    # dns:
+    #   - 1.1.1.1
+    #   - 8.8.8.8
     restart: always
     depends_on:
       - mocha_postgres
     environment:
       DB_USERNAME: "mocha"
-      DB_PASSWORD: "12345"
+      DB_PASSWORD: ${DB_PASSWORD}
       DB_HOST: "mocha_postgres"
-      SECRET: 'changeme'
+      SECRET: ${SECRET}
 
 volumes:
- pgdata_live:
+  pgdata_live:

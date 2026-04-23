@@ -1,5 +1,3 @@
-version: "3.1"
-
 services:
   mocha_postgres:
     container_name: mocha_postgres
@@ -9,23 +7,23 @@ services:
       - pgdata:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: mocha
-      POSTGRES_PASSWORD: 1234
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: mocha
 
   mocha:
     container_name: mocha
     build: "."
     ports:
-      - 3300:3300
+      - 3300:3000
       - 5001:5003
     restart: always
     depends_on:
       - mocha_postgres
     environment:
       DB_USERNAME: "mocha"
-      DB_PASSWORD: "1234"
+      DB_PASSWORD: ${DB_PASSWORD}
       DB_HOST: "mocha_postgres"
-      SECRET: 'changeme'
-      
-volumes: 
- pgdata:
+      SECRET: ${SECRET}
+
+volumes:
+  pgdata:

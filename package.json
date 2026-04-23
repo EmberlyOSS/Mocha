@@ -3,7 +3,8 @@
   "name": "mocha",
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev --parallel",
+    "dev": "turbo run dev",
+    "dev:docs": "cd apps/docs && mintlify dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
@@ -16,7 +17,7 @@
     "apps/*",
     "packages/*"
   ],
-  "packageManager": "yarn@4.2.2",
+  "packageManager": "bun@1.3.13",
   "dependencies": {
     "fastify": "^5.1.0"
   },
