@@ -83,10 +83,11 @@ const start = async () => {
   try {
     // Run prisma migrate and seed commands before starting the server
     await new Promise<void>((resolve, reject) => {
-      exec("npx prisma migrate deploy --schema=src/prisma/schema.prisma", (err, stdout, stderr) => {
+      exec("npx prisma db push --schema=src/prisma/schema.prisma --accept-data-loss", (err, stdout, stderr) => {
         if (err) {
           console.error(err);
           reject(err);
+          return;
         }
         console.log(stdout);
         console.error(stderr);
@@ -95,6 +96,7 @@ const start = async () => {
           if (err) {
             console.error(err);
             reject(err);
+            return;
           }
           console.log(stdout);
           console.error(stderr);
