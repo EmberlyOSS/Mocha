@@ -85,12 +85,13 @@ export function SubmitTicketPageClient() {
         <CardHeader>
           <CardTitle>Submit a ticket</CardTitle>
           <CardDescription>
-            Public ticket submission migrated from the old `/submit` page.
+            Share the details and our team will follow up.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Field label="Name">
+          <Field label="Name" htmlFor="submit-ticket-name">
             <input
+              id="submit-ticket-name"
               value={form.name}
               onChange={(event) =>
                 setForm((current) => ({ ...current, name: event.target.value }))
@@ -98,8 +99,9 @@ export function SubmitTicketPageClient() {
               className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none"
             />
           </Field>
-          <Field label="Email">
+          <Field label="Email" htmlFor="submit-ticket-email">
             <input
+              id="submit-ticket-email"
               type="email"
               value={form.email}
               onChange={(event) =>
@@ -111,8 +113,9 @@ export function SubmitTicketPageClient() {
               className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none"
             />
           </Field>
-          <Field label="Subject">
+          <Field label="Subject" htmlFor="submit-ticket-subject">
             <input
+              id="submit-ticket-subject"
               value={form.subject}
               onChange={(event) =>
                 setForm((current) => ({
@@ -124,8 +127,9 @@ export function SubmitTicketPageClient() {
             />
           </Field>
           <div className="grid gap-4 md:grid-cols-2">
-            <Field label="Issue type">
+            <Field label="Issue type" htmlFor="submit-ticket-type">
               <select
+                id="submit-ticket-type"
                 value={form.type}
                 onChange={(event) =>
                   setForm((current) => ({
@@ -142,8 +146,9 @@ export function SubmitTicketPageClient() {
                 ))}
               </select>
             </Field>
-            <Field label="Priority">
+            <Field label="Priority" htmlFor="submit-ticket-priority">
               <select
+                id="submit-ticket-priority"
                 value={form.priority}
                 onChange={(event) =>
                   setForm((current) => ({
@@ -159,8 +164,9 @@ export function SubmitTicketPageClient() {
               </select>
             </Field>
           </div>
-          <Field label="Description">
+          <Field label="Description" htmlFor="submit-ticket-description">
             <textarea
+              id="submit-ticket-description"
               rows={6}
               value={form.description}
               onChange={(event) =>
@@ -187,15 +193,19 @@ export function SubmitTicketPageClient() {
 }
 
 function Field({
+  htmlFor,
   label,
   children,
 }: {
+  htmlFor: string;
   label: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="space-y-2">
-      <label className="text-sm font-medium">{label}</label>
+      <label className="text-sm font-medium" htmlFor={htmlFor}>
+        {label}
+      </label>
       {children}
     </div>
   );

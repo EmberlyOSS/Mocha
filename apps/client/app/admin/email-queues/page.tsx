@@ -165,7 +165,7 @@ export default function EmailQueuesPage() {
                   onChange={(e) =>
                     setForm((f) => ({ ...f, username: e.target.value }))
                   }
-                  placeholder="support@example.com"
+                  placeholder="Mailbox address"
                   className="w-full h-10 rounded-2xl border border-white/[0.08] bg-white/[0.04] px-3 text-sm text-white placeholder-zinc-600 outline-none focus:ring-1 focus:ring-white/[0.15]"
                 />
               </div>
@@ -182,7 +182,7 @@ export default function EmailQueuesPage() {
                       onChange={(e) =>
                         setForm((f) => ({ ...f, hostname: e.target.value }))
                       }
-                      placeholder="imap.example.com"
+                      placeholder="IMAP hostname"
                       className="w-full h-10 rounded-2xl border border-white/[0.08] bg-white/[0.04] px-3 text-sm text-white placeholder-zinc-600 outline-none focus:ring-1 focus:ring-white/[0.15]"
                     />
                   </div>
@@ -215,7 +215,7 @@ export default function EmailQueuesPage() {
                       onChange={(e) =>
                         setForm((f) => ({ ...f, clientId: e.target.value }))
                       }
-                      placeholder="your-client-id"
+                      placeholder="Client ID"
                       className="w-full h-10 rounded-2xl border border-white/[0.08] bg-white/[0.04] px-3 text-sm text-white placeholder-zinc-600 outline-none focus:ring-1 focus:ring-white/[0.15]"
                     />
                   </div>
@@ -243,7 +243,7 @@ export default function EmailQueuesPage() {
                       onChange={(e) =>
                         setForm((f) => ({ ...f, redirectUri: e.target.value }))
                       }
-                      placeholder="https://yourdomain.com/api/v1/email-queue/oauth/gmail"
+                      placeholder="OAuth redirect URI"
                       className="w-full h-10 rounded-2xl border border-white/[0.08] bg-white/[0.04] px-3 text-sm text-white placeholder-zinc-600 outline-none focus:ring-1 focus:ring-white/[0.15]"
                     />
                   </div>

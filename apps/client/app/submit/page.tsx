@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { SubmitTicketPageClient } from "@/components/migration/submit-ticket-page";
+import { SubmitTicketPageClient } from "@/components/pages/submit-ticket-page";
 
 export const dynamic = "force-dynamic";
 

@@ -39,7 +39,8 @@ export default function FilteredIssuesPage({
               {status === "closed" ? "Closed issues" : "Open issues"}
             </CardTitle>
             <CardDescription>
-              Direct replacement for the old filtered issue pages.
+              Review {status === "closed" ? "resolved" : "active"} support
+              tickets.
             </CardDescription>
           </div>
           <Link href="/issues">

@@ -1,24 +1,13 @@
 "use client";
 
-import {
-  PiArrowRightDuotone,
-} from "react-icons/pi";
-import {
-  GoIssueOpened,
-  GoIssueClosed,
-  GoDotFill,
-} from "react-icons/go";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";
-import { Plus } from "lucide-react";
+import { GoDotFill, GoIssueClosed, GoIssueOpened } from "react-icons/go";
+import { PiArrowRightDuotone } from "react-icons/pi";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -48,6 +37,27 @@ export default function DashboardPage() {
   const { data: ticketsData, isLoading: ticketsLoading } = useTickets("open");
 
   const greeting = useMemo(() => getGreeting(), []);
+  const priorityItems = useMemo(() => {
+    const items = [];
+
+    if (unassigned > 0) {
+      items.push(
+        `${unassigned} unassigned ${unassigned === 1 ? "ticket" : "tickets"}`,
+      );
+    }
+
+    if (open > 0) {
+      items.push(`${open} open ${open === 1 ? "issue" : "issues"}`);
+    }
+
+    if (completed > 0) {
+      items.push(
+        `${completed} completed ${completed === 1 ? "issue" : "issues"}`,
+      );
+    }
+
+    return items.length ? items : ["No active ticket priorities"];
+  }, [completed, open, unassigned]);
 
   const stats = [
     {
@@ -93,7 +103,8 @@ export default function DashboardPage() {
             </h2>
 
             <p className="text-base sm:text-lg text-zinc-400/90 leading-relaxed max-w-2xl">
-              Here&apos;s what&apos;s happening with your support requests today.
+              Here&apos;s what&apos;s happening with your support requests
+              today.
             </p>
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -144,7 +155,9 @@ export default function DashboardPage() {
                 {statsLoading ? (
                   <Skeleton className="h-10 w-16 rounded-md" />
                 ) : (
-                  <p className={`text-4xl font-semibold tracking-tight ${stat.tone}`}>
+                  <p
+                    className={`text-4xl font-semibold tracking-tight ${stat.tone}`}
+                  >
                     {stat.value ?? 0}
                   </p>
                 )}
@@ -183,8 +196,11 @@ export default function DashboardPage() {
             <CardContent className="p-0">
               {ticketsLoading ? (
                 <div className="divide-y divide-white/5">
-                  {Array.from({ length: 4 }).map((_, i) => (
-                    <div key={i} className="flex items-center justify-between px-6 py-4">
+                  {["first", "second", "third", "fourth"].map((row) => (
+                    <div
+                      key={row}
+                      className="flex items-center justify-between px-6 py-4"
+                    >
                       <div className="space-y-2 flex-1">
                         <Skeleton className="h-3.5 w-3/4 rounded" />
                         <Skeleton className="h-2.5 w-1/2 rounded" />
@@ -213,7 +229,9 @@ export default function DashboardPage() {
                                   <span className="font-mono text-[10px] uppercase text-zinc-500 bg-white/5 px-1.5 py-0.5 rounded-sm">
                                     {ticket.id}
                                   </span>
-                                  <span>{ticket.assignedTo?.name ?? "Unassigned"}</span>
+                                  <span>
+                                    {ticket.assignedTo?.name ?? "Unassigned"}
+                                  </span>
                                 </p>
                               </div>
                             </div>
@@ -235,7 +253,7 @@ export default function DashboardPage() {
                     <div className="flex flex-col items-center gap-3 p-12 text-center">
                       <GoIssueClosed className="h-8 w-8 text-zinc-700" />
                       <p className="text-sm text-zinc-600 font-medium">
-                        No active issues — great work!
+                        No active issues.
                       </p>
                     </div>
                   )}
@@ -252,11 +270,7 @@ export default function DashboardPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 p-6 text-sm font-medium">
-              {[
-                "Admin surface, roles, clients",
-                "Portal flows & user tracking",
-                "Notebook extensions",
-              ].map((item) => (
+              {priorityItems.map((item) => (
                 <div
                   key={item}
                   className="flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] px-4 py-3 text-zinc-300 transition-colors hover:bg-white/5 cursor-default"
@@ -268,12 +282,14 @@ export default function DashboardPage() {
               <Separator className="!my-4 bg-white/5" />
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button className="w-full gap-2 rounded-xl h-11 font-medium bg-white text-black hover:bg-zinc-200">
-                    <Plus className="h-4 w-4" strokeWidth={2.4} />
-                    New feature flag
-                  </Button>
+                  <Link href="/settings">
+                    <Button className="w-full gap-2 rounded-xl h-11 font-medium bg-white text-black hover:bg-zinc-200">
+                      <Plus className="h-4 w-4" strokeWidth={2.4} />
+                      Review settings
+                    </Button>
+                  </Link>
                 </TooltipTrigger>
-                <TooltipContent>Toggle a local feature flag</TooltipContent>
+                <TooltipContent>Open workspace settings</TooltipContent>
               </Tooltip>
             </CardContent>
           </Card>

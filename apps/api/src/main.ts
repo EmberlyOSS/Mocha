@@ -81,8 +81,11 @@ server.addHook("preHandler", async function (request: any, reply: any) {
 
 const start = async () => {
   try {
-    // Run prisma migrate and seed commands before starting the server
+    console.info("[api] Starting Mocha API...");
+
+    // Run prisma schema sync and seed commands before starting the server.
     await new Promise<void>((resolve, reject) => {
+      console.info("[api] Syncing Prisma schema...");
       exec("npx prisma db push --schema=src/prisma/schema.prisma --accept-data-loss", (err, stdout, stderr) => {
         if (err) {
           console.error(err);
@@ -92,6 +95,7 @@ const start = async () => {
         console.log(stdout);
         console.error(stderr);
 
+        console.info("[api] Running Prisma seed...");
         exec("npx prisma db seed", (err, stdout, stderr) => {
           if (err) {
             console.error(err);
@@ -106,11 +110,13 @@ const start = async () => {
     });
 
     // connect to database
+    console.info("[api] Connecting to database...");
     await prisma.$connect();
-    server.log.info("Connected to Prisma");
+    console.info("[api] Connected to Prisma");
 
     const port = process.env.API_PORT || 5003;
 
+    console.info(`[api] Starting HTTP server on port ${port}...`);
     server.listen(
       { port: Number(port), host: "0.0.0.0" },
       async (err, address) => {
@@ -127,7 +133,7 @@ const start = async () => {
         });
 
         client.shutdownAsync();
-        console.info(`Server listening on ${address}`);
+        console.info(`[api] Server listening on ${address}`);
       }
     );
 

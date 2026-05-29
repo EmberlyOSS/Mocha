@@ -1,8 +1,13 @@
 "use client";
 
+import { Plus } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type * as React from "react";
+import { GoIssueOpened } from "react-icons/go";
 import {
-  PiCaretUpDown,
   PiBellDuotone,
+  PiCaretUpDown,
   PiEnvelopeDuotone,
   PiFilesDuotone,
   PiGearSixDuotone,
@@ -17,12 +22,9 @@ import {
   PiUsersDuotone,
   PiWarningDuotone,
 } from "react-icons/pi";
-import { GoIssueOpened } from "react-icons/go";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import type * as React from "react";
 import { BrandMark } from "@/components/brand/brand-mark";
+import { useIssueComposer } from "@/components/providers/issue-composer-provider";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,16 +47,14 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useSession, useUser } from "@/lib/store";
-import { useIssueComposer } from "@/components/providers/issue-composer-provider";
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: PiHouseDuotone },
@@ -70,7 +70,11 @@ const adminNavigation = [
   { name: "Users", href: "/admin/users/internal", icon: PiUsersDuotone },
   { name: "Roles", href: "/admin/roles", icon: PiShieldCheckDuotone },
   { name: "SMTP", href: "/admin/smtp", icon: PiEnvelopeDuotone },
-  { name: "Email Queues", href: "/admin/email-queues", icon: PiListBulletsDuotone },
+  {
+    name: "Email Queues",
+    href: "/admin/email-queues",
+    icon: PiListBulletsDuotone,
+  },
   { name: "Webhooks", href: "/admin/webhooks", icon: PiLinkDuotone },
   { name: "Logs", href: "/admin/logs", icon: PiWarningDuotone },
 ];
@@ -296,9 +300,11 @@ export function Sidebar({
                           <span className="truncate font-semibold">
                             {user.name}
                           </span>
-                          <span className="truncate text-xs text-muted-foreground">
-                            {user.email ?? "user@example.com"}
-                          </span>
+                          {user.email ? (
+                            <span className="truncate text-xs text-muted-foreground">
+                              {user.email}
+                            </span>
+                          ) : null}
                         </div>
                       </div>
                     </DropdownMenuLabel>

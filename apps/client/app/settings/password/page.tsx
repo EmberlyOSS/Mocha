@@ -50,13 +50,16 @@ export default function PasswordSettingsPage() {
         <CardHeader>
           <CardTitle>Password</CardTitle>
           <CardDescription>
-            Replaces the legacy `/settings/password` flow.
+            Change the password used for your Mocha account.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">New password</label>
+            <label className="text-sm font-medium" htmlFor="new-password">
+              New password
+            </label>
             <input
+              id="new-password"
               type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
@@ -64,8 +67,11 @@ export default function PasswordSettingsPage() {
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium">Confirm password</label>
+            <label className="text-sm font-medium" htmlFor="confirm-password">
+              Confirm password
+            </label>
             <input
+              id="confirm-password"
               type="password"
               value={confirmPassword}
               onChange={(event) => setConfirmPassword(event.target.value)}

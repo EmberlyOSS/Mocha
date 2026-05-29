@@ -214,12 +214,12 @@ export default function SmtpPage() {
                 label="Reply-to address"
                 fieldKey="reply"
                 type="email"
-                placeholder="noreply@example.com"
+                placeholder="Reply address"
               />
               <Field
                 label="Send-as username / address"
                 fieldKey="username"
-                placeholder="user@example.com"
+                placeholder="SMTP username"
               />
 
               {serviceType === "other" && (
@@ -227,7 +227,7 @@ export default function SmtpPage() {
                   <Field
                     label="SMTP host"
                     fieldKey="host"
-                    placeholder="smtp.example.com"
+                    placeholder="SMTP hostname"
                   />
                   <Field label="Port" fieldKey="port" placeholder="587" />
                   <Field
@@ -244,7 +244,7 @@ export default function SmtpPage() {
                   <Field
                     label="Client ID"
                     fieldKey="clientId"
-                    placeholder="your-client-id"
+                    placeholder="Client ID"
                   />
                   <Field
                     label="Client secret"
@@ -255,13 +255,13 @@ export default function SmtpPage() {
                   <Field
                     label="Redirect URI"
                     fieldKey="redirectUri"
-                    placeholder="https://yourdomain.com/api/v1/config/email/oauth/gmail"
+                    placeholder="OAuth redirect URI"
                   />
                   {serviceType === "microsoft" && (
                     <Field
                       label="Tenant ID"
                       fieldKey="tenantId"
-                      placeholder="your-tenant-id"
+                      placeholder="Tenant ID"
                     />
                   )}
                 </>
@@ -317,7 +317,7 @@ export default function SmtpPage() {
                 type="email"
                 value={testTo}
                 onChange={(e) => setTestTo(e.target.value)}
-                placeholder="test@example.com"
+                placeholder="Test recipient"
                 className="h-10 w-full rounded-2xl border border-white/[0.08] bg-white/[0.04] px-3 text-sm text-white placeholder-zinc-600 outline-none focus:ring-1 focus:ring-white/[0.15] sm:max-w-xs"
               />
               <Button

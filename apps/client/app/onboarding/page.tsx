@@ -1,9 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
-import { FaGithub } from "react-icons/fa";
 import {
   ArrowRight,
   BookOpenText,
@@ -11,8 +7,11 @@ import {
   Loader2,
   MessagesSquare,
   ShieldCheck,
-  Sparkles,
 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { FaGithub } from "react-icons/fa";
 import { BrandMark } from "@/components/brand/brand-mark";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -31,8 +30,8 @@ type ResourceCard = {
 
 const resources: ResourceCard[] = [
   {
-    title: "Source code",
-    description: "See how Mocha is wired, extended, and deployed.",
+    title: "Project repository",
+    description: "Review releases, deployment notes, and project updates.",
     href: "https://github.com/EmberlyOSS/Mocha",
     icon: FaGithub,
     external: true,
@@ -40,7 +39,7 @@ const resources: ResourceCard[] = [
   },
   {
     title: "Documentation",
-    description: "Read the setup guide, auth flow, and deployment notes.",
+    description: "Read setup, authentication, and operations guides.",
     href: "/documents",
     icon: BookOpenText,
     tone: "from-violet-500/20 via-violet-500/10 to-transparent",
@@ -56,9 +55,9 @@ const resources: ResourceCard[] = [
 ];
 
 const checklist = [
-  "Review the source and deployment layout.",
-  "Skim the docs so you know the core flows.",
-  "Jump into the dashboard and start triaging.",
+  "Confirm your profile details.",
+  "Review your notification preferences.",
+  "Open the dashboard and start triaging.",
 ];
 
 export default function OnboardingPage() {
@@ -68,10 +67,7 @@ export default function OnboardingPage() {
   const [completing, setCompleting] = useState(false);
   const [status, setStatus] = useState("");
 
-  const firstName = useMemo(() => {
-    if (!user?.name) return "there";
-    return user.name.split(" ")[0];
-  }, [user?.name]);
+  const displayName = user?.name || "there";
 
   const completeOnboarding = async () => {
     if (!user?.id) {
@@ -132,8 +128,8 @@ export default function OnboardingPage() {
 
             <div className="max-w-2xl space-y-5">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-zinc-400">
-                <Sparkles className="h-3.5 w-3.5 text-violet-300" />
-                Welcome back, {firstName}
+                <ShieldCheck className="h-3.5 w-3.5 text-emerald-300" />
+                Welcome back, {displayName}
               </div>
 
               <h1 className="max-w-xl text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
@@ -141,9 +137,8 @@ export default function OnboardingPage() {
               </h1>
 
               <p className="max-w-2xl text-base leading-relaxed text-zinc-400 sm:text-lg">
-                Use this quick start screen to learn the ecosystem, inspect the
-                codebase, and finish setup. Then we’ll drop you straight into
-                the queue.
+                Confirm your account settings, review the support resources, and
+                continue to your workspace.
               </p>
             </div>
 
@@ -210,8 +205,7 @@ export default function OnboardingPage() {
                       Finish setup
                     </p>
                     <p className="text-sm leading-relaxed text-zinc-400">
-                      Mark the first-login flow complete and head to the
-                      dashboard.
+                      Complete this step and continue to the dashboard.
                     </p>
                   </div>
 
@@ -265,19 +259,19 @@ export default function OnboardingPage() {
                 Setup guide
               </div>
               <h2 className="text-2xl font-semibold tracking-tight text-white">
-                Start with the three touchpoints that matter.
+                Start with the essentials.
               </h2>
               <p className="text-sm leading-relaxed text-zinc-400">
-                A clean onboarding step works best when it points people toward
-                the places they’ll actually use on day one.
+                These links cover the areas most teams need before handling the
+                first ticket.
               </p>
             </div>
 
             <div className="space-y-3">
               {[
-                "Connect the codebase and docs.",
-                "Skim the issue composer and queue layout.",
-                "Drop into the dashboard once you’re done.",
+                "Check your account and profile settings.",
+                "Review ticket queues and notification settings.",
+                "Open the dashboard when you’re ready.",
               ].map((item, index) => (
                 <div
                   key={item}
@@ -294,10 +288,12 @@ export default function OnboardingPage() {
             </div>
 
             <div className="rounded-[26px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5">
-              <p className="text-sm font-semibold text-white">One last thing</p>
+              <p className="text-sm font-semibold text-white">
+                Ready to continue
+              </p>
               <p className="mt-2 text-sm leading-relaxed text-zinc-400">
-                Once you finish this screen, the onboarding flag is cleared and
-                you’ll land on the main dashboard.
+                Once you finish this step, Mocha will take you to the main
+                dashboard.
               </p>
             </div>
           </div>
