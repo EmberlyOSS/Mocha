@@ -155,7 +155,7 @@ export default function ProfilePage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                placeholder="Email address"
                 className="h-11 rounded-xl bg-white/[0.04] border-white/10 text-white placeholder-zinc-600 focus-visible:ring-1 focus-visible:ring-violet-500/40"
               />
             </div>

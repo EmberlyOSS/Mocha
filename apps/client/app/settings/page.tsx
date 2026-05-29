@@ -1,12 +1,12 @@
 "use client";
 
-import {
-  PiBellDuotone,
-  PiMonitorDuotone,
-  PiFlagDuotone,
-  PiArrowRightDuotone,
-} from "react-icons/pi";
 import Link from "next/link";
+import {
+  PiArrowRightDuotone,
+  PiBellDuotone,
+  PiFlagDuotone,
+  PiMonitorDuotone,
+} from "react-icons/pi";
 import { BrandMark } from "@/components/brand/brand-mark";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -39,7 +39,7 @@ const settingsSections = [
     href: "/settings/flags",
     icon: PiFlagDuotone,
     title: "Feature flags",
-    description: "Client-side toggles for experimental or legacy features.",
+    description: "Enable or disable workspace features.",
     accent: "from-emerald-500/15 to-teal-500/5 border-emerald-500/20",
     iconColor: "text-emerald-400",
     glow: "group-hover:shadow-emerald-500/20",
@@ -73,7 +73,15 @@ export default function SettingsPage() {
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {settingsSections.map(
-            ({ href, icon: Icon, title, description, accent, iconColor, glow }) => (
+            ({
+              href,
+              icon: Icon,
+              title,
+              description,
+              accent,
+              iconColor,
+              glow,
+            }) => (
               <Tooltip key={href}>
                 <TooltipTrigger asChild>
                   <Link

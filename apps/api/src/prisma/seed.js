@@ -1,5 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
+const bcrypt = require("bcrypt");
 const crypto = require("crypto");
+const packageJson = require("../../package.json");
 
 const prisma = new PrismaClient();
 
@@ -8,37 +10,54 @@ async function main() {
   const templates = await prisma.emailTemplate.findMany({});
 
   if (setup === null) {
+    const generatedAdminPassword = crypto.randomBytes(18).toString("base64url");
+    const adminEmail =
+      process.env.SEED_ADMIN_EMAIL ||
+      `admin-${crypto.randomBytes(4).toString("hex")}@mocha.local`;
+    const adminName = process.env.SEED_ADMIN_NAME || "Mocha Admin";
+    const adminPassword = process.env.SEED_ADMIN_PASSWORD || generatedAdminPassword;
+    const internalClientEmail =
+      process.env.SEED_INTERNAL_CLIENT_EMAIL ||
+      `internal-${crypto.randomBytes(4).toString("hex")}@mocha.local`;
+    const internalClientName = process.env.SEED_INTERNAL_CLIENT_NAME || "Internal";
+    const appVersion = process.env.MOCHA_VERSION || packageJson.version;
+
     await prisma.user.upsert({
-      where: { email: "admin@admin.com" },
+      where: { email: adminEmail },
       update: {},
       create: {
-        email: `admin@admin.com`,
-        name: "admin",
+        email: adminEmail,
+        name: adminName,
         isAdmin: true,
-        password:
-          "$2b$10$BFmibvOW7FtY0soAAwujoO9y2tIyB7WEJ2HNq9O7zh9aeejMvRsKu",
+        password: await bcrypt.hash(adminPassword, 10),
         language: "en",
       },
     });
 
     await prisma.client.upsert({
-      where: { email: `internal@admin.com` },
+      where: { email: internalClientEmail },
       update: {},
       create: {
-        email: `internal@admin.com`,
-        name: "internal",
-        contactName: "admin",
-        number: "123456789",
+        email: internalClientEmail,
+        name: internalClientName,
+        contactName: adminName,
+        number: process.env.SEED_INTERNAL_CLIENT_NUMBER || null,
         active: true,
       },
     });
+
+    if (!process.env.SEED_ADMIN_PASSWORD) {
+      console.log(`Seed admin email: ${adminEmail}`);
+      console.log("Seed admin password: generated (not logged)");
+      console.log("Set SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD to control these values.");
+    }
 
     const encryptionKey = crypto.randomBytes(32); // Generates a random key
 
     const conf = await prisma.config.create({
       data: {
-        gh_version: "0.4.3",
-        client_version: "0.4.3",
+        gh_version: appVersion,
+        client_version: appVersion,
         encryption_key: encryptionKey,
       },
     });

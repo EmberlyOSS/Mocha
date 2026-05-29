@@ -30,8 +30,8 @@ const features = [
   },
   {
     icon: CircleDot,
-    title: "Smart queue",
-    desc: "Prioritise, assign and close faster than ever.",
+    title: "Issue queue",
+    desc: "Prioritise, assign and close tickets from one place.",
   },
 ];
 
@@ -125,7 +125,7 @@ export default function LoginPage() {
           <div className="mt-10 space-y-8 xl:mt-16">
             <div className="space-y-4">
               <div className="inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1.5 text-xs font-semibold text-violet-300 tracking-widest uppercase">
-                Support command center
+                Support center
               </div>
               <h2 className="text-5xl xl:text-6xl font-bold tracking-tight text-white leading-[1.1]">
                 Keep every issue
@@ -155,7 +155,6 @@ export default function LoginPage() {
               ))}
             </div>
           </div>
-
         </div>
       </div>
 
@@ -171,14 +170,14 @@ export default function LoginPage() {
           </div>
 
           {/* Heading */}
-            <div className="space-y-1">
-              <h1 className="text-3xl font-bold tracking-tight text-white">
-                Welcome back
-              </h1>
-              <p className="text-zinc-500">
-                Sign in to your workspace to continue.
-              </p>
-            </div>
+          <div className="space-y-1">
+            <h1 className="text-3xl font-bold tracking-tight text-white">
+              Welcome back
+            </h1>
+            <p className="text-zinc-500">
+              Sign in to your workspace to continue.
+            </p>
+          </div>
 
           {/* Form */}
           <div className="space-y-5">
@@ -198,7 +197,7 @@ export default function LoginPage() {
                   autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
+                  placeholder="Email address"
                   className="h-13 w-full rounded-xl border border-white/[0.08] bg-white/[0.05] pl-11 pr-4 py-3.5 text-sm text-white placeholder-zinc-600 outline-none transition-all focus:border-violet-500/50 focus:bg-white/[0.08] focus:ring-2 focus:ring-violet-500/15"
                 />
               </div>

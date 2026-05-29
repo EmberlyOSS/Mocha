@@ -1,9 +1,9 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { GoIssueOpened, GoIssueClosed } from "react-icons/go";
-import { PiCalendarDuotone, PiUserDuotone, PiTagDuotone } from "react-icons/pi";
 import type * as React from "react";
+import { GoIssueClosed, GoIssueOpened } from "react-icons/go";
+import { PiCalendarDuotone, PiTagDuotone, PiUserDuotone } from "react-icons/pi";
 import { CardContent } from "@/components/ui/card";
 import { useTicket } from "@/hooks/use-tickets";
 import { formatDate } from "@/lib/api";
@@ -31,11 +31,13 @@ export default function IssueDetailPage() {
           </div>
           <div className="mt-4 flex flex-col gap-2">
             <h1 className="text-3xl font-semibold tracking-tight text-white">
-              {isLoading ? "Loading issue..." : (ticket?.title ?? "Issue not found")}
+              {isLoading
+                ? "Loading issue..."
+                : (ticket?.title ?? "Issue not found")}
             </h1>
             <p className="text-sm text-zinc-500">
               {ticket?.detail?.slice(0, 140) ??
-                "The issue detail shell surfaces the core metadata and conversation summary."}
+                "Review the issue metadata, assignee, and internal notes."}
             </p>
           </div>
         </div>
@@ -46,9 +48,13 @@ export default function IssueDetailPage() {
               <div className="grid gap-4 md:grid-cols-3">
                 <DetailCard
                   label="Status"
-                  value={ticket.isComplete ? "Closed" : (ticket.status ?? "Open")}
+                  value={
+                    ticket.isComplete ? "Closed" : (ticket.status ?? "Open")
+                  }
                   icon={ticket.isComplete ? GoIssueClosed : GoIssueOpened}
-                  tone={ticket.isComplete ? "text-violet-400" : "text-emerald-400"}
+                  tone={
+                    ticket.isComplete ? "text-violet-400" : "text-emerald-400"
+                  }
                 />
                 <DetailCard
                   label="Priority"
@@ -72,7 +78,7 @@ export default function IssueDetailPage() {
                   <p className="mt-3 whitespace-pre-wrap leading-7 text-zinc-300">
                     {ticket.note ||
                       ticket.detail ||
-                      "The rich editor view has not been migrated yet. This page is the thin detail shell for the new app."}
+                      "No issue details were provided."}
                   </p>
                 </div>
 
@@ -100,7 +106,9 @@ export default function IssueDetailPage() {
                       Internal note
                     </p>
                     <p className="mt-3 text-sm leading-6 text-zinc-400">
-                      {ticket.note ? "Composer metadata was stored on this issue." : "No internal note was added."}
+                      {ticket.note
+                        ? "Composer metadata was stored on this issue."
+                        : "No internal note was added."}
                     </p>
                   </div>
                 </div>
@@ -108,7 +116,7 @@ export default function IssueDetailPage() {
             </>
           ) : (
             <div className="rounded-[24px] border border-dashed border-white/10 px-6 py-10 text-zinc-500">
-              The issue payload could not be loaded.
+              This issue could not be loaded.
             </div>
           )}
         </CardContent>

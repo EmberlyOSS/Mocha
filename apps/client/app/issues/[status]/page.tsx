@@ -10,7 +10,30 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useAllTickets } from "@/hooks/use-tickets";
+import { useTickets } from "@/hooks/use-tickets";
+
+const statusCopy = {
+  open: {
+    title: "Open issues",
+    description: "Review active support tickets.",
+    empty: "No open issues were returned.",
+  },
+  closed: {
+    title: "Closed issues",
+    description: "Review resolved support tickets.",
+    empty: "No closed issues were returned.",
+  },
+  unassigned: {
+    title: "Unassigned issues",
+    description: "Review active tickets without an assignee.",
+    empty: "No unassigned issues were returned.",
+  },
+} as const;
+
+type IssueStatus = keyof typeof statusCopy;
+
+const isIssueStatus = (status: string): status is IssueStatus =>
+  status in statusCopy;
 
 export default function FilteredIssuesPage({
   params,
@@ -18,29 +41,20 @@ export default function FilteredIssuesPage({
   params: Promise<{ status: string }>;
 }) {
   const { status } = use(params);
-  const { data, isLoading } = useAllTickets();
+  const currentStatus = isIssueStatus(status) ? status : "open";
+  const copy = statusCopy[currentStatus];
+  const { data, isLoading } = useTickets(currentStatus);
 
   const tickets = useMemo(() => {
-    const all = data?.tickets ?? [];
-    if (status === "open") {
-      return all.filter((ticket) => !ticket.isComplete);
-    }
-    if (status === "closed") {
-      return all.filter((ticket) => Boolean(ticket.isComplete));
-    }
-    return [];
-  }, [data?.tickets, status]);
+    return data?.tickets ?? [];
+  }, [data?.tickets]);
   return (
     <div className="flex flex-col gap-6 p-6 lg:p-8">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between gap-4">
           <div>
-            <CardTitle>
-              {status === "closed" ? "Closed issues" : "Open issues"}
-            </CardTitle>
-            <CardDescription>
-              Direct replacement for the old filtered issue pages.
-            </CardDescription>
+            <CardTitle>{copy.title}</CardTitle>
+            <CardDescription>{copy.description}</CardDescription>
           </div>
           <Link href="/issues">
             <Button variant="outline" size="sm">
@@ -80,7 +94,7 @@ export default function FilteredIssuesPage({
             </div>
           ) : (
             <div className="px-6 py-16 text-center text-sm text-muted-foreground">
-              No {status} issues were returned.
+              {copy.empty}
             </div>
           )}
         </CardContent>

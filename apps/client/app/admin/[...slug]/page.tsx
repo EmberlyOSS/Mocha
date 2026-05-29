@@ -20,27 +20,25 @@ const routeDescriptions: Record<
 > = {
   authentication: {
     title: "Authentication",
-    description:
-      "Legacy admin authentication settings migrated into the new shell.",
+    description: "Configure authentication settings.",
   },
   clients: {
     title: "Clients",
-    description: "Client directory from the old admin area.",
+    description: "Manage client records and contact details.",
     endpoint: "/api/v1/clients/all",
   },
   "clients/new": {
     title: "Create client",
-    description:
-      "Dedicated create-client screen still needs endpoint-specific controls.",
+    description: "Add a client record.",
   },
   "email-queues": {
     title: "Email queues",
-    description: "Queue overview from the legacy admin app.",
+    description: "Manage inbound email queues.",
     endpoint: "/api/v1/email-queues/all",
   },
   "email-queues/new": {
     title: "Create email queue",
-    description: "New queue flow has been routed into the new shell.",
+    description: "Add a new inbound email queue.",
   },
   "email-queues/oauth": {
     title: "Email queue OAuth",
@@ -53,13 +51,12 @@ const routeDescriptions: Record<
   },
   roles: {
     title: "Roles",
-    description: "Role configuration surface.",
+    description: "Manage role access and permissions.",
     endpoint: "/api/v1/roles/all",
   },
   "roles/new": {
     title: "Create role",
-    description:
-      "Route migrated; role creation controls still need a dedicated editor.",
+    description: "Create a role for your team.",
   },
   smtp: {
     title: "SMTP",
@@ -67,7 +64,7 @@ const routeDescriptions: Record<
   },
   "smtp/oauth": {
     title: "SMTP OAuth",
-    description: "SMTP provider OAuth callback route.",
+    description: "Complete SMTP provider authorization.",
   },
   tickets: {
     title: "Admin tickets",
@@ -81,8 +78,7 @@ const routeDescriptions: Record<
   },
   "users/internal/new": {
     title: "Create internal user",
-    description:
-      "Route migrated; account creation form still needs a dedicated editor.",
+    description: "Add an internal team member.",
   },
   webhooks: {
     title: "Webhooks",
@@ -98,7 +94,7 @@ export default function AdminCatchAllPage({
 }) {
   const { slug } = use(params);
   const [data, setData] = useState<AdminData | null>(null);
-  const [status, setStatus] = useState("Loading route...");
+  const [status, setStatus] = useState("Loading...");
 
   const routeKey = useMemo(() => slug.join("/"), [slug]);
   const config = useMemo(() => {
@@ -108,19 +104,18 @@ export default function AdminCatchAllPage({
     if (slug[0] === "roles" && slug[1] && slug[1] !== "new") {
       return {
         title: `Role ${slug[1]}`,
-        description: "Dynamic role detail route migrated into the new shell.",
+        description: "Review role details and permissions.",
       };
     }
     if (slug[0] === "smtp" && slug[1] === "templates" && slug[2]) {
       return {
         title: `SMTP template ${slug[2]}`,
-        description: "Dynamic SMTP template route migrated into the new shell.",
+        description: "Review and update this SMTP template.",
       };
     }
     return {
       title: `Admin / ${routeKey}`,
-      description:
-        "Route path exists in the new shell, but no dedicated data loader has been attached yet.",
+      description: "Choose an available admin section.",
     };
   }, [routeKey, slug]);
 
@@ -128,7 +123,7 @@ export default function AdminCatchAllPage({
     const load = async () => {
       if (!config.endpoint) {
         setData(null);
-        setStatus("Route migrated.");
+        setStatus("Ready");
         return;
       }
 
@@ -137,7 +132,7 @@ export default function AdminCatchAllPage({
       try {
         const response = await api<AdminData>(config.endpoint);
         setData(response);
-        setStatus("Route migrated.");
+        setStatus("Loaded");
       } catch (error) {
         setStatus(
           error instanceof Error ? error.message : "Failed to load route data.",
@@ -165,7 +160,7 @@ export default function AdminCatchAllPage({
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle>Migration status</CardTitle>
+          <CardTitle>Section status</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">{status}</p>

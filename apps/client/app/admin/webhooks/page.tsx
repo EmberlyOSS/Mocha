@@ -174,7 +174,7 @@ export default function WebhooksPage() {
                   type="url"
                   value={form.url}
                   onChange={(e) => setForm((f) => ({ ...f, url: e.target.value }))}
-                  placeholder="https://example.com/webhook"
+                  placeholder="Webhook URL"
                   className="w-full h-10 rounded-2xl border border-white/[0.08] bg-white/[0.04] px-3 text-sm text-white placeholder-zinc-600 outline-none focus:ring-1 focus:ring-white/[0.15]"
                 />
               </div>

@@ -20,8 +20,7 @@ export function NotFoundScreen() {
             This route is not available
           </CardTitle>
           <CardDescription>
-            The old client had a custom 404 page. This version now exists in the
-            new `mocha-client` shell too.
+            The page you requested could not be found.
           </CardDescription>
         </CardHeader>
         <CardContent className="flex justify-center gap-3">

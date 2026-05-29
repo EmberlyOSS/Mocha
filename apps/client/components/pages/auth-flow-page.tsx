@@ -4,7 +4,7 @@ import { setCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { AuthShell } from "@/components/migration/auth-shell";
+import { AuthShell } from "@/components/pages/auth-shell";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 
@@ -79,20 +79,26 @@ function RegisterFlow() {
   return (
     <AuthShell
       title="Create your account"
-      description="External user registration migrated into the new client shell."
+      description="Create an account to submit and track support tickets."
       footerLink={{ href: "/auth/login", label: "Back to sign in" }}
     >
       <div className="space-y-2">
-        <label className="text-sm font-medium">Name</label>
+        <label className="text-sm font-medium" htmlFor="register-name">
+          Name
+        </label>
         <input
+          id="register-name"
           value={name}
           onChange={(event) => setName(event.target.value)}
           className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none"
         />
       </div>
       <div className="space-y-2">
-        <label className="text-sm font-medium">Email</label>
+        <label className="text-sm font-medium" htmlFor="register-email">
+          Email
+        </label>
         <input
+          id="register-email"
           type="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
@@ -100,8 +106,11 @@ function RegisterFlow() {
         />
       </div>
       <div className="space-y-2">
-        <label className="text-sm font-medium">Password</label>
+        <label className="text-sm font-medium" htmlFor="register-password">
+          Password
+        </label>
         <input
+          id="register-password"
           type="password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
@@ -109,8 +118,14 @@ function RegisterFlow() {
         />
       </div>
       <div className="space-y-2">
-        <label className="text-sm font-medium">Confirm password</label>
+        <label
+          className="text-sm font-medium"
+          htmlFor="register-password-confirm"
+        >
+          Confirm password
+        </label>
         <input
+          id="register-password-confirm"
           type="password"
           value={passwordConfirm}
           onChange={(event) => setPasswordConfirm(event.target.value)}
@@ -118,8 +133,11 @@ function RegisterFlow() {
         />
       </div>
       <div className="space-y-2">
-        <label className="text-sm font-medium">Language</label>
+        <label className="text-sm font-medium" htmlFor="register-language">
+          Language
+        </label>
         <select
+          id="register-language"
           value={language}
           onChange={(event) => setLanguage(event.target.value)}
           className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none"
@@ -210,14 +228,20 @@ function ResetPasswordFlow() {
   return (
     <AuthShell
       title="Reset password"
-      description="Migrated password reset flow for email reset links."
+      description="Enter your reset code and choose a new password."
       footerLink={{ href: "/auth/login", label: "Back to sign in" }}
     >
       {step === "code" ? (
         <>
           <div className="space-y-2">
-            <label className="text-sm font-medium">Verification code</label>
+            <label
+              className="text-sm font-medium"
+              htmlFor="reset-verification-code"
+            >
+              Verification code
+            </label>
             <input
+              id="reset-verification-code"
               value={code}
               onChange={(event) => setCode(event.target.value)}
               className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none"
@@ -234,8 +258,11 @@ function ResetPasswordFlow() {
       ) : (
         <>
           <div className="space-y-2">
-            <label className="text-sm font-medium">New password</label>
+            <label className="text-sm font-medium" htmlFor="reset-password">
+              New password
+            </label>
             <input
+              id="reset-password"
               type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
@@ -334,7 +361,7 @@ export function AuthFlowPageClient({ flow }: { flow: string }) {
     return (
       <CallbackFlow
         title="Completing OAuth sign in"
-        description="Finishing the migrated OAuth callback flow."
+        description="Finishing your OAuth sign in."
         callback="/api/v1/auth/oauth/callback"
       />
     );
@@ -344,7 +371,7 @@ export function AuthFlowPageClient({ flow }: { flow: string }) {
     return (
       <CallbackFlow
         title="Completing OIDC sign in"
-        description="Finishing the migrated OIDC callback flow."
+        description="Finishing your OIDC sign in."
         callback="/api/v1/auth/oidc/callback"
       />
     );
@@ -352,8 +379,8 @@ export function AuthFlowPageClient({ flow }: { flow: string }) {
 
   return (
     <AuthShell
-      title="Unsupported auth route"
-      description={`No migrated auth flow exists for "${flow}".`}
+      title="Sign-in link unavailable"
+      description={`The sign-in link "${flow}" is not active.`}
     >
       <div className="text-center text-sm text-muted-foreground">
         <Link href="/auth/login" className="hover:text-foreground">

@@ -21,14 +21,13 @@ export default function AdminPage() {
     <div className="p-6 lg:p-8">
       <Card className="max-w-3xl">
         <CardHeader>
-          <CardTitle>Admin migration surface</CardTitle>
+          <CardTitle>Admin</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 text-sm text-muted-foreground">
           <p>Signed in as: {user?.name ?? "Unknown user"}</p>
           <p>
-            The admin routes from `pages/admin/*` now resolve inside
-            `mocha-client`. High-traffic list views are wired up first; deeper
-            create and edit flows still need endpoint-specific UI.
+            Manage clients, tickets, roles, users, email queues, webhooks, and
+            operational logs from one place.
           </p>
           <div className="grid gap-2 pt-2 md:grid-cols-2">
             {adminRoutes.map((route) => (

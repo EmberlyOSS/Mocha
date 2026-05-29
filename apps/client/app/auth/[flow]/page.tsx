@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { AuthFlowPageClient } from "@/components/migration/auth-flow-page";
+import { AuthFlowPageClient } from "@/components/pages/auth-flow-page";
 
 export const dynamic = "force-dynamic";
 
