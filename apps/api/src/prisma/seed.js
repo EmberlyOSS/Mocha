@@ -48,7 +48,7 @@ async function main() {
 
     if (!process.env.SEED_ADMIN_PASSWORD) {
       console.log(`Seed admin email: ${adminEmail}`);
-      console.log(`Seed admin password: ${generatedAdminPassword}`);
+      console.log("Seed admin password: generated (not logged)");
       console.log("Set SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD to control these values.");
     }
 

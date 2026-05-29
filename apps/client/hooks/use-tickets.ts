@@ -34,10 +34,18 @@ export function useTicketStats() {
   };
 }
 
-export function useTickets(status: "open" | "closed" = "open") {
+type TicketStatus = "open" | "closed" | "unassigned";
+
+const ticketStatusEndpoint: Record<TicketStatus, string> = {
+  open: "/api/v1/tickets/open",
+  closed: "/api/v1/tickets/completed",
+  unassigned: "/api/v1/tickets/unassigned",
+};
+
+export function useTickets(status: TicketStatus = "open") {
   return useQuery({
     queryKey: ["tickets", status],
-    queryFn: () => fetcher<{ tickets: Ticket[] }>(`/api/v1/tickets/${status}`),
+    queryFn: () => fetcher<{ tickets: Ticket[] }>(ticketStatusEndpoint[status]),
   });
 }
 

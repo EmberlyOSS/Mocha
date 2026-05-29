@@ -470,8 +470,24 @@ export function ticketRoutes(fastify: FastifyInstance) {
       const tickets = await prisma.ticket.findMany({
         where: {
           isComplete: false,
-          assignedTo: null,
+          userId: null,
           hidden: false,
+        },
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+        ],
+        include: {
+          client: {
+            select: { id: true, name: true, number: true },
+          },
+          assignedTo: {
+            select: { id: true, name: true },
+          },
+          team: {
+            select: { id: true, name: true },
+          },
         },
       });
 

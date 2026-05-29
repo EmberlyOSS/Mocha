@@ -138,7 +138,9 @@ export function GlobalCommand({
             </button>
             <button
               type="button"
-              onClick={() => runCommand(() => router.push("/issues"))}
+              onClick={() =>
+                runCommand(() => router.push("/issues/unassigned"))
+              }
               className="flex flex-col items-start gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-4 text-left transition hover:bg-white/[0.05] hover:border-white/10"
             >
               <PiLightningDuotone className="h-5 w-5 text-amber-400" />
