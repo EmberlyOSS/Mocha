@@ -14,7 +14,7 @@ COPY packages/ ./packages/
 COPY apps/api/package.json ./apps/api/
 COPY apps/client/package.json ./apps/client/
 COPY apps/landing/package.json ./apps/landing/
-RUN bun install --frozen-lockfile
+RUN bun install
 
 # Copy source
 COPY apps/api ./apps/api
